@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Workprint</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="bootstrap-responsive.css" rel="stylesheet">
+
+    <link href="style.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Workprint
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <!--
+        <div class="span2">
+          <div class="well">
+            <ul class="nav nav-list">
+              <li id="CutList" class="nav-header">Cutlist <div class="icon-remove"></div>
+              </li>
+              <li id="Rolls" class="nav-header">Rolls <span class="badge">0</span>
+              </li>
+              <li id="Shots" class="nav-header">Shots <span class="badge">0</span>
+              </li>
+              <li id="CutList" class="nav-header">Reports <span class="badge">0</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      -->
+        <div class="span12">
+        <!--Body-->
+          <div id="landing" class="hero-unit">
+            <h1>Create a new cutlist</h1>
+            <p>Start by uploading a project exported from Final Cut Pro using their <a href="http://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=97%26section=3%26tasks=true" target="blank">XML Interchange Format</a>, version 5. You will be prompted to either enter your roll information or upload a <a href="">Roll Info file (.edg)</a>. You can also start a project by manually entering in the frame numbers of individual shots.</p>
+            <div class="btn btn-primary" id="upload">
+              <div class="icon-upload icon-white"></div> Upload .xml
+            </div>
+            <div class="btn btn-warning disabled" id="manual">
+               <div class="icon-pencil icon-white"></div> Enter manually
+            </div>
+          </div>
+          <br />
+          <form id="uploadFile" action="xml2json.php" method="POST" enctype="multipart/form-data" class="well" style="margin-top: -17px;" action="">
+            <h3>Upload an .xml file</h3>
+            <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
+            <input id="browseFile" name="file" type="file" class="span3" placeholder="Choose a file..." />
+            <p class="help-block">Choose a Final cut project that has been exported using their <a href="http://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=97%26section=3%26tasks=true" target="blank">XML Interchange Format</a>, version 5</p>
+            <input type="submit" value="Build Cutlist" name="submit" class="btn btn-primary disabled" id="loadFile">
+          </form>
+         <div id="keycodeEntry">
+         </div>
+          <br />
+          <div id="cutlist">
+            <h1>Cuts</h1>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th></th>
+                  <th>Reel</th>
+                  <th>Key</th>
+                  <th>Frames</th>
+                  <th>Footage</th>
+                  <th>Digital</th>
+                  <th>Rate</th>
+                  <th>Timecode</th>
+                  <th>Deviate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="ID-uuid2">
+                  <td>1</td>
+                  <td><center>i</center></td>
+                  <td>ReellName</td>
+                  <td>XXXX 0000 0000+00</td>
+                  <td>4000</td>
+                  <td>000+00'</td>
+                  <td>5000</td>
+                  <td>29.97</td>
+                  <td>03:45;24</td>
+                  <td>-2</td>
+                </tr>
+                <tr id="ID-uuid3">
+                  <td></td>
+                  <td><center>o</center></td>
+                  <td></td>
+                  <td>XXXX 0000 0000+00</td>
+                  <td>4000</td>
+                  <td>000+00'</td>
+                  <td>5000</td>
+                  <td></td>
+                  <td>03:45;24</td>
+                  <td></td>
+                </tr>
+                <tr id="ID-uuid4">
+                  <td>2</td>
+                  <td><center>i</center></td>
+                  <td>ReellName</td>
+                  <td>XXXX 0000 0000+00</td>
+                  <td>4000</td>
+                  <td>000+00'</td>
+                  <td>5000</td>
+                  <td>29.97</td>
+                  <td>03:45;24</td>
+                  <td>-2</td>
+                </tr>
+                <tr id="ID-uuid5">
+                  <td></td>
+                  <td><center>o</center></td>
+                  <td></td>
+                  <td>XXXX 0000 0000+00</td>
+                  <td>4000</td>
+                  <td>000+00'</td>
+                  <td>5000</td>
+                  <td></td>
+                  <td>03:45;24</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br />
+          <div id="reels">
+            <h1>Reels</h1>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Key In</th>
+                  <th>Key Out</th>
+                  <th>Frames</th>
+                  <th>Footage</th>
+                  <th>D Length</th>
+                  <th>Framerate</th>
+                  <th>Timecode</th>
+                  <th>Deviate</th>
+                  <th>C</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="ID-uuid">
+                  <td>ReelName</td>
+                  <td>XXXX 0000 0000+00</td>
+                  <td>XXXX 0000 0000+00</td>
+                  <td>4000</td>
+                  <td>000+00'</td>
+                  <td>5000</td>
+                  <td>29.97</td>
+                  <td>03:45;24</td>
+                  <td>-2</td>
+                  <td>-0.0001</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        <!--Body-->
+        </div>
+      </div>
+    </div> <!-- /container -->
+
+    <script id="keycodeInput" type="text/x-jQuery-tmpl">
+        <div id="inputID-${id}" class="keycodeInput well span6">
+            <h3>"${name}" - ${digital}</h3>
+            <p>Video <span class="videoLength label label-info">+${digital}</span> 
+            Footage <span class="footageEst label label-warning">~${rough}</span></p>
+            <div>
+              <input type="text" class="span12 i" placeholder="Keycode IN: AA00 0000 0000+00">
+              <div class="enteredText i lead"> </div>
+            </div>
+            <div>
+              <input type="text" class="span12 o" placeholder="Keycode OUT: AA00 0000 0000+00">
+              <div class="enteredText o lead"> </div>
+            </div>
+            <div class="btn btn-primary save keycodeSave disabled"><div class="icon-share icon-white"></div> Save</div>
+            <div class="btn btn-warning"><div class="icon-remove icon-white"></div> Clear</div>
+          </div>
+    </script>
+    <script id="reelDisplay" type="text/x-jQuery-tmpl">
+      <tr id="ID-${id}">
+          <td>${name}</td>
+          <td>${keycode.i}</td>
+          <td>${keycode.o}</td>
+          <td>${frames}</td>
+          <td>${footage}</td>
+          <td>${digital}</td>
+          <td>${framerate}</td>
+          <td>${timecode}</td>
+          <td>${deviate}</td>
+          <td>${C}</td>
+        </tr>
+    </script>
+    <script id="cutDisplay" type="text/x-jQuery-tmpl">
+      <tr id="ID-I-${id}">
+        <td>${index}</td>
+        <td><center><strong>I</strong></center></td>
+        <td>${reel}</td>
+        <td>${keycode.i[0]} ${keycode.i[1]} <span class="alert alert-success little-alert">${keycode.i[2]}</span></td>
+        <td>${frames.i}</td>
+        <td>${feet.i}</td>
+        <td>${digital.i}</td>
+        <td>${framerate}</td>
+        <td>${timecode.i}</td>
+        <td>${deviate}</td>
+      </tr>
+      <tr id="ID-O-${id}">
+        <td></td>
+        <td><center><strong>O</strong></center></td>
+        <td></td>
+        <td>${keycode.o[0]} ${keycode.o[1]} <span class="alert alert-error little-alert">${keycode.o[2]}</span></td>
+        <td>${frames.o}</td>
+        <td>${feet.o}</td>
+        <td>${digital.o}</td>
+        <td></td>
+        <td>${timecode.o}</td>
+        <td></td>
+      </tr>
+    </script>
+
+    <!-- THE javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="jquery.min.js"></script>
+    <script src="jquery.form.js"></script>
+    <!--
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-transition.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-alert.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-modal.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-dropdown.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-tab.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-tooltip.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-popover.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-button.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-collapse.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-carousel.js"></script>
+    <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-typeahead.js"></script>
+  -->
+    <script src="script.js"></script>
+    <script src="workprint.js"></script>
+  </body>
+</html>

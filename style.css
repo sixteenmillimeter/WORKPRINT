@@ -1,0 +1,14 @@
+/* Put your css in here */
+
+/*hide at beginning */
+#uploadFile,
+#reels,
+#cutlist,
+#keycodeEntry,
+.enteredText{
+  display:none;
+  }
+
+  span.little-alert{
+  	padding: 5px 8px 5px 8px;
+  }

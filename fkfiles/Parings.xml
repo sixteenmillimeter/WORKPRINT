@@ -1,0 +1,1596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xmeml>
+<xmeml version="1">
+<sequence id="Parings">
+	<name>Parings</name>
+	<duration>2668</duration>
+	<rate>
+		<ntsc>TRUE</ntsc>
+		<timebase>30</timebase>
+	</rate>
+	<timecode>
+		<rate>
+			<ntsc>TRUE</ntsc>
+			<timebase>30</timebase>
+		</rate>
+		<string>01:00:00;00</string>
+		<frame>107892</frame>
+		<source>source</source>
+		<displayformat>DF</displayformat>
+	</timecode>
+	<in>-1</in>
+	<out>-1</out>
+	<media>
+		<video>
+			<format>
+				<samplecharacteristics>
+					<width>720</width>
+					<height>486</height>
+					<anamorphic>FALSE</anamorphic>
+					<pixelaspectratio>NTSC-601</pixelaspectratio>
+					<fielddominance>lower</fielddominance>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<colordepth>24</colordepth>
+					<codec>
+						<name>Apple FCP Uncompressed 8-bit 4:2:2</name>
+						<appspecificdata>
+							<appname>Final Cut Pro</appname>
+							<appmanufacturer>Apple Inc.</appmanufacturer>
+							<appversion>7.0</appversion>
+							<data>
+								<qtcodec>
+									<codecname>Apple FCP Uncompressed 8-bit 4:2:2</codecname>
+									<codectypename>Uncompressed 8-bit 4:2:2</codectypename>
+									<codectypecode>2vuy</codectypecode>
+									<codecvendorcode>KeyG</codecvendorcode>
+									<spatialquality>1024</spatialquality>
+									<temporalquality>0</temporalquality>
+									<keyframerate>0</keyframerate>
+									<datarate>0</datarate>
+								</qtcodec>
+							</data>
+						</appspecificdata>
+					</codec>
+				</samplecharacteristics>
+				<appspecificdata>
+					<appname>Final Cut Pro</appname>
+					<appmanufacturer>Apple Inc.</appmanufacturer>
+					<appversion>7.0</appversion>
+					<data>
+						<fcpimageprocessing>
+							<useyuv>TRUE</useyuv>
+							<usesuperwhite>FALSE</usesuperwhite>
+							<rendermode>YUV8BPP</rendermode>
+						</fcpimageprocessing>
+					</data>
+				</appspecificdata>
+			</format>
+			<track>
+				<clipitem id="Roll 6 - Logged">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>2135</in>
+					<out>2256</out>
+					<start>0</start>
+					<end>121</end>
+					<sequence id="Roll 6 - Logged1">
+						<name>Roll 6 - Logged</name>
+						<duration>5269</duration>
+						<rate>
+							<ntsc>TRUE</ntsc>
+							<timebase>30</timebase>
+						</rate>
+						<timecode>
+							<rate>
+								<ntsc>TRUE</ntsc>
+								<timebase>30</timebase>
+							</rate>
+							<string>01:00:00;00</string>
+							<frame>107892</frame>
+							<source>source</source>
+							<displayformat>DF</displayformat>
+						</timecode>
+						<in>1100</in>
+						<out>1552</out>
+						<media>
+							<video>
+								<format>
+									<samplecharacteristics>
+										<width>720</width>
+										<height>486</height>
+										<anamorphic>FALSE</anamorphic>
+										<pixelaspectratio>NTSC-601</pixelaspectratio>
+										<fielddominance>lower</fielddominance>
+										<rate>
+											<ntsc>TRUE</ntsc>
+											<timebase>30</timebase>
+										</rate>
+										<colordepth>24</colordepth>
+										<codec>
+											<name>Apple FCP Uncompressed 8-bit 4:2:2</name>
+											<appspecificdata>
+												<appname>Final Cut Pro</appname>
+												<appmanufacturer>Apple Inc.</appmanufacturer>
+												<appversion>7.0</appversion>
+												<data>
+													<qtcodec>
+														<codecname>Apple FCP Uncompressed 8-bit 4:2:2</codecname>
+														<codectypename>Uncompressed 8-bit 4:2:2</codectypename>
+														<codectypecode>2vuy</codectypecode>
+														<codecvendorcode>KeyG</codecvendorcode>
+														<spatialquality>1024</spatialquality>
+														<temporalquality>0</temporalquality>
+														<keyframerate>0</keyframerate>
+														<datarate>0</datarate>
+													</qtcodec>
+												</data>
+											</appspecificdata>
+										</codec>
+									</samplecharacteristics>
+									<appspecificdata>
+										<appname>Final Cut Pro</appname>
+										<appmanufacturer>Apple Inc.</appmanufacturer>
+										<appversion>7.0</appversion>
+										<data>
+											<fcpimageprocessing>
+												<useyuv>TRUE</useyuv>
+												<usesuperwhite>FALSE</usesuperwhite>
+												<rendermode>Float10BPP</rendermode>
+											</fcpimageprocessing>
+										</data>
+									</appspecificdata>
+								</format>
+								<track>
+									<clipitem id="eileen r 12-21-11 ">
+										<name>eileen r 12-21-11</name>
+										<duration>53601</duration>
+										<rate>
+											<ntsc>TRUE</ntsc>
+											<timebase>30</timebase>
+										</rate>
+										<in>27082</in>
+										<out>32351</out>
+										<start>0</start>
+										<end>5269</end>
+										<pixelaspectratio>NTSC-601</pixelaspectratio>
+										<anamorphic>FALSE</anamorphic>
+										<alphatype>none</alphatype>
+										<alphareverse>FALSE</alphareverse>
+										<masterclipid>eileen r 12-21-11 1</masterclipid>
+										<logginginfo>
+											<scene/>
+											<shottake/>
+											<lognote/>
+											<good>FALSE</good>
+										</logginginfo>
+										<labels>
+											<label2/>
+										</labels>
+										<comments>
+											<mastercomment1/>
+											<mastercomment2/>
+											<mastercomment3/>
+											<mastercomment4/>
+										</comments>
+										<file id="eileen r 12-21-11 2">
+											<name>eileen r 12-21-11.mov</name>
+											<pathurl>file://localhost/Volumes/TB/FOOTAGE/From%20Away/eileen%20r%2012-21-11.mov</pathurl>
+											<rate>
+												<timebase>30</timebase>
+												<ntsc>TRUE</ntsc>
+											</rate>
+											<duration>53601</duration>
+											<media>
+												<video>
+													<duration>53601</duration>
+													<samplecharacteristics>
+														<width>720</width>
+														<height>486</height>
+													</samplecharacteristics>
+												</video>
+											</media>
+										</file>
+										<filter>
+											<enabled>TRUE</enabled>
+											<start>-1</start>
+											<end>-1</end>
+											<effect>
+												<name>Color Corrector</name>
+												<effectid>Color Corrector</effectid>
+												<effectcategory>Color Correction</effectcategory>
+												<effecttype>filter</effecttype>
+												<mediatype>video</mediatype>
+												<parameter>
+													<parameterid>dispmode</parameterid>
+													<name>Display Mode</name>
+													<valuemin>1</valuemin>
+													<valuemax>3</valuemax>
+													<valuelist>
+														<valueentry>
+															<name>Final</name>
+															<value>1</value>
+														</valueentry>
+														<valueentry>
+															<name>Matte</name>
+															<value>2</value>
+														</valueentry>
+														<valueentry>
+															<name>Source</name>
+															<value>3</value>
+														</valueentry>
+													</valuelist>
+													<value>1</value>
+												</parameter>
+												<parameter>
+													<parameterid>label1</parameterid>
+													<name>Level Controls</name>
+													<value/>
+												</parameter>
+												<parameter>
+													<parameterid>highlights</parameterid>
+													<name>Highlights</name>
+													<valuemin>64</valuemin>
+													<valuemax>509</valuemax>
+													<value>255</value>
+												</parameter>
+												<parameter>
+													<parameterid>mids</parameterid>
+													<name>Mids</name>
+													<valuemin>0</valuemin>
+													<valuemax>200</valuemax>
+													<value>100</value>
+												</parameter>
+												<parameter>
+													<parameterid>blacklevel</parameterid>
+													<name>Blacks</name>
+													<valuemin>-196</valuemin>
+													<valuemax>254</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>label2</parameterid>
+													<name>Color Balance</name>
+													<value/>
+												</parameter>
+												<parameter>
+													<parameterid>hue</parameterid>
+													<name>Angle</name>
+													<valuemin>-180</valuemin>
+													<valuemax>180</valuemax>
+													<value>-33</value>
+												</parameter>
+												<parameter>
+													<parameterid>mag</parameterid>
+													<name>Magnitude</name>
+													<valuemin>0</valuemin>
+													<valuemax>200</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>label4</parameterid>
+													<name>Color Controls</name>
+													<value/>
+												</parameter>
+												<parameter>
+													<parameterid>chroma</parameterid>
+													<name>Saturation</name>
+													<valuemin>0</valuemin>
+													<valuemax>200</valuemax>
+													<value>100</value>
+												</parameter>
+												<parameter>
+													<parameterid>phase</parameterid>
+													<name>Phase shift</name>
+													<valuemin>-180</valuemin>
+													<valuemax>180</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>label5</parameterid>
+													<name>Limit Effect Controls</name>
+													<value/>
+												</parameter>
+												<parameter>
+													<parameterid>dochroma</parameterid>
+													<name>Limit on Chroma</name>
+													<value>FALSE</value>
+												</parameter>
+												<parameter>
+													<parameterid>centerang</parameterid>
+													<name>Chroma Center</name>
+													<valuemin>-760</valuemin>
+													<valuemax>760</valuemax>
+													<value>-110</value>
+												</parameter>
+												<parameter>
+													<parameterid>chromawidth</parameterid>
+													<name>Chroma Width</name>
+													<valuemin>0</valuemin>
+													<valuemax>360</valuemax>
+													<value>15</value>
+												</parameter>
+												<parameter>
+													<parameterid>chromasoft</parameterid>
+													<name>Chroma Softness</name>
+													<valuemin>0</valuemin>
+													<valuemax>180</valuemax>
+													<value>10</value>
+												</parameter>
+												<parameter>
+													<parameterid>dosat</parameterid>
+													<name>Limit on Saturation</name>
+													<value>FALSE</value>
+												</parameter>
+												<parameter>
+													<parameterid>satmin</parameterid>
+													<name>Sat. Minimum</name>
+													<valuemin>0</valuemin>
+													<valuemax>125</valuemax>
+													<value>35</value>
+												</parameter>
+												<parameter>
+													<parameterid>satwidth</parameterid>
+													<name>Sat. Width</name>
+													<valuemin>0</valuemin>
+													<valuemax>125</valuemax>
+													<value>40</value>
+												</parameter>
+												<parameter>
+													<parameterid>satsoft</parameterid>
+													<name>Sat. Softness</name>
+													<valuemin>0</valuemin>
+													<valuemax>125</valuemax>
+													<value>20</value>
+												</parameter>
+												<parameter>
+													<parameterid>doluma</parameterid>
+													<name>Limit on Luma</name>
+													<value>FALSE</value>
+												</parameter>
+												<parameter>
+													<parameterid>lumamin</parameterid>
+													<name>Luma Minimum</name>
+													<valuemin>0</valuemin>
+													<valuemax>120</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>lumawidth</parameterid>
+													<name>Luma Width</name>
+													<valuemin>0</valuemin>
+													<valuemax>120</valuemax>
+													<value>40</value>
+												</parameter>
+												<parameter>
+													<parameterid>lumasoft</parameterid>
+													<name>Luma Softness</name>
+													<valuemin>0</valuemin>
+													<valuemax>120</valuemax>
+													<value>20</value>
+												</parameter>
+												<parameter>
+													<parameterid>label6</parameterid>
+													<name>Edge Control</name>
+													<value/>
+												</parameter>
+												<parameter>
+													<parameterid>edgethin</parameterid>
+													<name>Thin/Spread</name>
+													<valuemin>-100</valuemin>
+													<valuemax>100</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>edgefeather</parameterid>
+													<name>Softening</name>
+													<valuemin>0</valuemin>
+													<valuemax>100</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>label7</parameterid>
+													<name>Mask Control</name>
+													<value/>
+												</parameter>
+												<parameter>
+													<parameterid>invertsel</parameterid>
+													<name>Invert</name>
+													<value>FALSE</value>
+												</parameter>
+												<parameter>
+													<parameterid>debugshow</parameterid>
+													<name>Show Stats</name>
+													<value>FALSE</value>
+												</parameter>
+											</effect>
+										</filter>
+										<filter>
+											<effect>
+												<name>Basic Motion</name>
+												<effectid>basic</effectid>
+												<effectcategory>motion</effectcategory>
+												<effecttype>motion</effecttype>
+												<mediatype>video</mediatype>
+												<parameter>
+													<parameterid>scale</parameterid>
+													<name>Scale</name>
+													<valuemin>0</valuemin>
+													<valuemax>1000</valuemax>
+													<value>100</value>
+												</parameter>
+												<parameter>
+													<parameterid>rotation</parameterid>
+													<name>Rotation</name>
+													<valuemin>-8640</valuemin>
+													<valuemax>8640</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>center</parameterid>
+													<name>Center</name>
+													<value>
+														<horiz>0</horiz>
+														<vert>0</vert>
+													</value>
+												</parameter>
+												<parameter>
+													<parameterid>centerOffset</parameterid>
+													<name>Anchor Point</name>
+													<value>
+														<horiz>0</horiz>
+														<vert>0</vert>
+													</value>
+												</parameter>
+											</effect>
+										</filter>
+										<filter>
+											<enabled>FALSE</enabled>
+											<effect>
+												<name>Drop Shadow</name>
+												<effectid>dropshadow</effectid>
+												<effectcategory>motion</effectcategory>
+												<effecttype>motion</effecttype>
+												<mediatype>video</mediatype>
+												<parameter>
+													<parameterid>offset</parameterid>
+													<name>offset</name>
+													<valuemin>-100</valuemin>
+													<valuemax>100</valuemax>
+													<value>2</value>
+												</parameter>
+												<parameter>
+													<parameterid>angle</parameterid>
+													<name>angle</name>
+													<valuemin>-720</valuemin>
+													<valuemax>720</valuemax>
+													<value>135</value>
+												</parameter>
+												<parameter>
+													<parameterid>color</parameterid>
+													<name>color</name>
+													<value>
+														<alpha>0</alpha>
+														<red>0</red>
+														<green>0</green>
+														<blue>0</blue>
+													</value>
+												</parameter>
+												<parameter>
+													<parameterid>softness</parameterid>
+													<name>softness</name>
+													<valuemin>0</valuemin>
+													<valuemax>100</valuemax>
+													<value>10</value>
+												</parameter>
+												<parameter>
+													<parameterid>opacity</parameterid>
+													<name>opacity</name>
+													<valuemin>0</valuemin>
+													<valuemax>100</valuemax>
+													<value>50</value>
+												</parameter>
+											</effect>
+										</filter>
+										<filter>
+											<enabled>FALSE</enabled>
+											<effect>
+												<name>Motion Blur</name>
+												<effectid>motionblur</effectid>
+												<effectcategory>motion</effectcategory>
+												<effecttype>motion</effecttype>
+												<mediatype>video</mediatype>
+												<parameter>
+													<parameterid>duration</parameterid>
+													<name>% Blur</name>
+													<valuemin>0</valuemin>
+													<valuemax>1000</valuemax>
+													<value>500</value>
+												</parameter>
+												<parameter>
+													<parameterid>samples</parameterid>
+													<name>Samples</name>
+													<valuemin>1</valuemin>
+													<valuemax>16</valuemax>
+													<value>4</value>
+												</parameter>
+											</effect>
+										</filter>
+										<filter>
+											<effect>
+												<name>Crop</name>
+												<effectid>crop</effectid>
+												<effectcategory>motion</effectcategory>
+												<effecttype>motion</effecttype>
+												<mediatype>video</mediatype>
+												<parameter>
+													<parameterid>left</parameterid>
+													<name>left</name>
+													<valuemin>0</valuemin>
+													<valuemax>100</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>right</parameterid>
+													<name>right</name>
+													<valuemin>0</valuemin>
+													<valuemax>100</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>top</parameterid>
+													<name>top</name>
+													<valuemin>0</valuemin>
+													<valuemax>100</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>bottom</parameterid>
+													<name>bottom</name>
+													<valuemin>0</valuemin>
+													<valuemax>100</valuemax>
+													<value>0</value>
+												</parameter>
+												<parameter>
+													<parameterid>edgefeather</parameterid>
+													<name>edgefeather</name>
+													<valuemin>0</valuemin>
+													<valuemax>100</valuemax>
+													<value>0</value>
+												</parameter>
+											</effect>
+										</filter>
+										<filter>
+											<effect>
+												<name>Distort</name>
+												<effectid>deformation</effectid>
+												<effectcategory>motion</effectcategory>
+												<effecttype>motion</effecttype>
+												<mediatype>video</mediatype>
+												<parameter>
+													<parameterid>ulcorner</parameterid>
+													<name>Upper Left</name>
+													<value>
+														<horiz>-0.5</horiz>
+														<vert>-0.5</vert>
+													</value>
+												</parameter>
+												<parameter>
+													<parameterid>urcorner</parameterid>
+													<name>Upper Right</name>
+													<value>
+														<horiz>0.5</horiz>
+														<vert>-0.5</vert>
+													</value>
+												</parameter>
+												<parameter>
+													<parameterid>lrcorner</parameterid>
+													<name>Lower Right</name>
+													<value>
+														<horiz>0.5</horiz>
+														<vert>0.5</vert>
+													</value>
+												</parameter>
+												<parameter>
+													<parameterid>llcorner</parameterid>
+													<name>Lower Left</name>
+													<value>
+														<horiz>-0.5</horiz>
+														<vert>0.5</vert>
+													</value>
+												</parameter>
+												<parameter>
+													<parameterid>aspect</parameterid>
+													<name>Aspect</name>
+													<valuemin>-10000</valuemin>
+													<valuemax>10000</valuemax>
+													<value>0</value>
+												</parameter>
+											</effect>
+										</filter>
+										<filter>
+											<effect>
+												<name>Opacity</name>
+												<effectid>opacity</effectid>
+												<effectcategory>motion</effectcategory>
+												<effecttype>motion</effecttype>
+												<mediatype>video</mediatype>
+												<parameter>
+													<parameterid>opacity</parameterid>
+													<name>opacity</name>
+													<valuemin>0</valuemin>
+													<valuemax>100</valuemax>
+													<value>100</value>
+												</parameter>
+											</effect>
+										</filter>
+										<sourcetrack>
+											<mediatype>video</mediatype>
+										</sourcetrack>
+										<fielddominance>lower</fielddominance>
+									</clipitem>
+									<enabled>TRUE</enabled>
+									<locked>FALSE</locked>
+								</track>
+							</video>
+							<audio>
+								<format>
+									<samplecharacteristics>
+										<depth>16</depth>
+										<samplerate>48000</samplerate>
+									</samplecharacteristics>
+								</format>
+								<outputs>
+									<group>
+										<index>1</index>
+										<numchannels>2</numchannels>
+										<downmix>0</downmix>
+										<channel>
+											<index>1</index>
+										</channel>
+										<channel>
+											<index>2</index>
+										</channel>
+									</group>
+								</outputs>
+								<in>1100</in>
+								<out>1552</out>
+								<track>
+									<enabled>TRUE</enabled>
+									<locked>FALSE</locked>
+									<outputchannelindex>1</outputchannelindex>
+								</track>
+								<track>
+									<enabled>TRUE</enabled>
+									<locked>FALSE</locked>
+									<outputchannelindex>2</outputchannelindex>
+								</track>
+								<track>
+									<enabled>TRUE</enabled>
+									<locked>FALSE</locked>
+									<outputchannelindex>1</outputchannelindex>
+								</track>
+								<track>
+									<enabled>TRUE</enabled>
+									<locked>FALSE</locked>
+									<outputchannelindex>2</outputchannelindex>
+								</track>
+							</audio>
+						</media>
+					</sequence>
+					<sourcetrack>
+						<mediatype>video</mediatype>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>1</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged2</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>1</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged3</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>1</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged4">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>3179</in>
+					<out>3511</out>
+					<start>175</start>
+					<end>507</end>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>video</mediatype>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged4</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>2</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged5</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>2</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged6</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>2</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged7">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>2682</in>
+					<out>3114</out>
+					<start>676</start>
+					<end>1108</end>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>video</mediatype>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged7</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>3</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged8</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>3</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged9</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>3</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged10">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>3645</in>
+					<out>4077</out>
+					<start>1124</start>
+					<end>1556</end>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>video</mediatype>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged10</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>4</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged11</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>4</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged12</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>4</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged13">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>1100</in>
+					<out>1552</out>
+					<start>2216</start>
+					<end>2668</end>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>video</mediatype>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged13</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>5</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged14</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>5</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged15</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>5</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<enabled>TRUE</enabled>
+				<locked>FALSE</locked>
+			</track>
+		</video>
+		<audio>
+			<format>
+				<samplecharacteristics>
+					<depth>16</depth>
+					<samplerate>48000</samplerate>
+				</samplecharacteristics>
+			</format>
+			<outputs>
+				<group>
+					<index>1</index>
+					<numchannels>2</numchannels>
+					<downmix>0</downmix>
+					<channel>
+						<index>1</index>
+					</channel>
+					<channel>
+						<index>2</index>
+					</channel>
+				</group>
+			</outputs>
+			<in>-1</in>
+			<out>-1</out>
+			<track>
+				<clipitem id="Roll 6 - Logged2">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>2135</in>
+					<out>2256</out>
+					<start>0</start>
+					<end>121</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>-1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>1</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged2</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>1</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged3</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>1</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged5">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>3179</in>
+					<out>3511</out>
+					<start>175</start>
+					<end>507</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>-1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged4</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>2</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged5</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>2</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged6</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>2</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged8">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>2682</in>
+					<out>3114</out>
+					<start>676</start>
+					<end>1108</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>-1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged7</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>3</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged8</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>3</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged9</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>3</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged11">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>3645</in>
+					<out>4077</out>
+					<start>1124</start>
+					<end>1556</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>-1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged10</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>4</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged11</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>4</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged12</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>4</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged14">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>1100</in>
+					<out>1552</out>
+					<start>2216</start>
+					<end>2668</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>-1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged13</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>5</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged14</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>5</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged15</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>5</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<enabled>TRUE</enabled>
+				<locked>FALSE</locked>
+				<outputchannelindex>1</outputchannelindex>
+			</track>
+			<track>
+				<clipitem id="Roll 6 - Logged3">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>2135</in>
+					<out>2256</out>
+					<start>0</start>
+					<end>121</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>1</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged2</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>1</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged3</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>1</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged6">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>3179</in>
+					<out>3511</out>
+					<start>175</start>
+					<end>507</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged4</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>2</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged5</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>2</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged6</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>2</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged9">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>2682</in>
+					<out>3114</out>
+					<start>676</start>
+					<end>1108</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged7</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>3</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged8</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>3</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged9</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>3</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged12">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>3645</in>
+					<out>4077</out>
+					<start>1124</start>
+					<end>1556</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged10</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>4</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged11</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>4</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged12</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>4</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<clipitem id="Roll 6 - Logged15">
+					<name>Roll 6 - Logged</name>
+					<duration>5269</duration>
+					<rate>
+						<ntsc>TRUE</ntsc>
+						<timebase>30</timebase>
+					</rate>
+					<in>1100</in>
+					<out>1552</out>
+					<start>2216</start>
+					<end>2668</end>
+					<filter>
+						<effect>
+							<name>Audio Levels</name>
+							<effectid>audiolevels</effectid>
+							<effectcategory>audiolevels</effectcategory>
+							<effecttype>audiolevels</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Level</name>
+								<parameterid>level</parameterid>
+								<valuemin>0</valuemin>
+								<valuemax>3.98109</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<filter>
+						<effect>
+							<name>Audio Pan</name>
+							<effectid>audiopan</effectid>
+							<effectcategory>audiopan</effectcategory>
+							<effecttype>audiopan</effecttype>
+							<mediatype>audio</mediatype>
+							<parameter>
+								<name>Pan</name>
+								<parameterid>pan</parameterid>
+								<valuemin>-1</valuemin>
+								<valuemax>1</valuemax>
+								<value>1</value>
+							</parameter>
+						</effect>
+					</filter>
+					<sequence id="Roll 6 - Logged1"/>
+					<sourcetrack>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+					</sourcetrack>
+					<link>
+						<linkclipref>Roll 6 - Logged13</linkclipref>
+						<mediatype>video</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>5</clipindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged14</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>1</trackindex>
+						<clipindex>5</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+					<link>
+						<linkclipref>Roll 6 - Logged15</linkclipref>
+						<mediatype>audio</mediatype>
+						<trackindex>2</trackindex>
+						<clipindex>5</clipindex>
+						<groupindex>1</groupindex>
+					</link>
+				</clipitem>
+				<enabled>TRUE</enabled>
+				<locked>FALSE</locked>
+				<outputchannelindex>2</outputchannelindex>
+			</track>
+			<track>
+				<enabled>TRUE</enabled>
+				<locked>FALSE</locked>
+				<outputchannelindex>1</outputchannelindex>
+			</track>
+			<track>
+				<enabled>TRUE</enabled>
+				<locked>FALSE</locked>
+				<outputchannelindex>2</outputchannelindex>
+			</track>
+		</audio>
+	</media>
+</sequence>
+</xmeml>
+
+
