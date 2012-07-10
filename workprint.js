@@ -7,74 +7,6 @@
 	LE16 - Linear Editor for 16mm                                                       
 */
 
-/*
-OBJECT STRUCTURE
-var reel = {
-	"type" : "reel",
-	"id" : uuid,
-    "name" : "",
-    "keycode" : {
-    	"i" : "EM70 0218 7804+16", //display as normalDisplay due to array issues
-   		"o" : "EM70 0218 7806+00"
-   		},
-    "frames" : 4000, //real film frames
-    "footage" : "0000+00'", 
-    "rough" : 0+00', //generate
-    "realtime" : 0000000000, //in milliseconds for @24fps
-    "digital" : 5000,
-    "timecode" : "00:00;00" //@framerate NON-ESSENTIAL
-    "deviate" : -2,
-    "C" : 0.0000, //float value almost always, correction value for digital cuts
-    "filename" : "",
-    "framerate" : 29.97
-}
-
-//cuts to be stored in an array within a film object
-var cut = {
-	"type" : "cut",
-	"id" : uuid,
-	"reelObj" : {}, //Full object or...
-	"reel" : 'reference uuid',
-	digital : { //video frames
-		"i" : 0,
-		"o" : 3400
-		},
-	frames : {
-		"i" : 0, 
-		"o" 2300
-		},
-	feet : {
-		"i" : "0+00'", 
-		"o" : "20+00'"
-		},
-	keycode : {
-		"i" : "XXXX 0000 0000+00", // store as normalDisplay string due to array not displaying well
-		"o" : "XXXX 0000 0000+00"
-	},
-	realtime : { //very very non-essential, maybe not supported
-		"i" : 0000000, //millis
-		"o" : 0011011 //@24fps
-	},
-	timecode : { //represented at framerate grabbed from the object
-		"i" : "00:00:00",
-		"o" : "00:00:00"
-	}
-	"deviate" : 0, //frames of deviation d/a occuring within the cut, determined by length
-	location : { //location in sequence, digital value, to be converted, valuable for determining black space... hmmm
-		"start" : 0,
-		"end" : 100
-	}
-}
-
-var film = {
-	"type" : "film",
-	"id" : uuid,
-	"cuts" : [],
-	"reels" : [],
-	"name" : "title"
-}
-*/
-
 $('#upload').click(function () {
     'use strict';
     $('#landing').fadeOut('560');
@@ -100,262 +32,341 @@ $('#uploadFile').ajaxForm({
     },
     success: function (data) {
         'use strict';
-        build(data);
+        WP.build(data);
     }
 });
 
-var film = {};
-var build = function (obj) {
-	'use strict';
-	if (obj!= false && obj !== undefined) {
-		if (obj['@attributes'].version === "5" || obj['@attributes'].version === "4") {
-		console.dir(obj);
-		var cuts = [],
-			reels = [],
-			keys = [];
-		if (isArray(obj.sequence.media.video.track)){
-			for (var i in obj.sequence.media.video.track) {
-				if (obj.sequence.media.video.track[i].clipitem !== undefined) {
-					cuts = cuts.concat(obj.sequence.media.video.track[i].clipitem);
+var film = {},
+	WP = {
+
+		build : function (obj) {
+			'use strict';
+			if (obj!= false && obj !== undefined) {
+				if (obj['@attributes'].version === "5" || obj['@attributes'].version === "4") {
+				console.dir(obj);
+				var cuts = [],
+					reels = [],
+					keys = [];
+				if (isArray(obj.sequence.media.video.track)){
+					for (var i in obj.sequence.media.video.track) {
+						if (obj.sequence.media.video.track[i].clipitem !== undefined) {
+							cuts = cuts.concat(obj.sequence.media.video.track[i].clipitem);
+						}
+					}
+					cuts.sort(sortTracks);
+				} else {
+					cuts = obj.sequence.media.video.track.clipitem;
 				}
+				//populate film data
+				film.type = "film";
+				film.name = obj.sequence.name;
+				film.id = uuid();
+				film.reels = [];
+				film.cuts = [];
+				//console.dir(film);
+				for (var i in cuts) {
+					//Isolate reels, put into objects/arrays
+					if ( $.inArray(cuts[i].name + '**' + cuts[i].duration, reels) === -1) {
+						var unique = reels.length;
+						reels[unique] = cuts[i].name + '**' + cuts[i].duration;
+						film.reels[unique] = {};
+						film.reels[unique].type = 'reel';
+						film.reels[unique].id = uuid();
+						keys[reels[unique]] = film.reels[unique].id;
+						film.reels[unique].name = cuts[i].name;
+						film.reels[unique].keycode = {'i':null,'o':null};
+						film.reels[unique].frames = null;
+						film.reels[unique].footage = null;
+						film.reels[unique].rough = toRough((parseInt(cuts[i].duration) - 1), parseFloat(cuts[i].rate.timebase));
+						film.reels[unique].realtime = null;
+						film.reels[unique].digital = parseInt(cuts[i].duration) - 1; //SUBTRACTING 1 FROM FCP REPORTED LENGTH, so 0 = 0 not 0 = 1
+						film.reels[unique].timecode = toTimecode(parseInt(film.reels[unique].digital), parseFloat(cuts[i].rate.timebase));
+						film.reels[unique].deviate = 0;
+						film.reels[unique].C = 0;
+						film.reels[unique].filename = null;
+						film.reels[unique].framerate = parseFloat(cuts[i].rate.timebase);
+						if (film.reels[unique].framerate === 30) {
+							film.reels[unique].framerate = 29.97;
+						}
+					}
+					//Isolate cuts, put into objects/arrays
+					film.cuts[i] = {};
+					film.cuts[i].type = 'cut';
+					film.cuts[i].index = parseInt(i);
+					film.cuts[i].id = uuid();
+
+					film.cuts[i].reel = cuts[i].name;
+					film.cuts[i].digital = {
+						'i' : parseInt(cuts[i].in),
+						'o' : parseInt(cuts[i].out)
+					};
+					film.cuts[i].feet = {'i' : null, 'o' : null};
+					film.cuts[i].keycode = {'i':null,'o':null};
+					//film.cuts[i].realtime = {'i' : null, 'o' : null};
+					film.cuts[i].timecode = {
+						'i' : toTimecode(cuts[i].in, cuts[i].rate.timebase),
+						'o' : toTimecode(cuts[i].out, cuts[i].rate.timebase)
+					};
+					film.cuts[i].deviate = 0;
+					film.cuts[i].location = {
+						'start' : parseInt(cuts[i].start),
+						'end' : parseInt(cuts[i].end)
+					};
+				}
+				WP.detectBlack();
+				WP.dataInput();
 			}
-			cuts.sort(sortTracks);
-		} else {
-			cuts = obj.sequence.media.video.track.clipitem;
+			return false;
 		}
-		//populate film data
-		film.type = "film";
-		film.name = obj.sequence.name;
-		film.id = uuid();
-		film.reels = [];
-		film.cuts = [];
+	},
+	//update sidebar ui
+	//@returns: layout of forms to accept keycode data
+	dataInput : function () {
+		'use strict';
 		//console.dir(film);
-		for (var i in cuts) {
-			//Isolate reels, put into objects/arrays
-			if ( $.inArray(cuts[i].name + '**' + cuts[i].duration, reels) === -1) {
-				var unique = reels.length;
-				reels[unique] = cuts[i].name + '**' + cuts[i].duration;
-				film.reels[unique] = {};
-				film.reels[unique].type = 'reel';
-				film.reels[unique].id = uuid();
-				keys[reels[unique]] = film.reels[unique].id;
-				film.reels[unique].name = cuts[i].name;
-				film.reels[unique].keycode = {'i':null,'o':null};
-				film.reels[unique].frames = null;
-				film.reels[unique].footage = null;
-				film.reels[unique].rough = toRough((parseInt(cuts[i].duration) - 1), parseFloat(cuts[i].rate.timebase));
-				film.reels[unique].realtime = null;
-				film.reels[unique].digital = parseInt(cuts[i].duration) - 1; //SUBTRACTING 1 FROM FCP REPORTED LENGTH, so 0 = 0 not 0 = 1
-				film.reels[unique].timecode = toTimecode(parseInt(film.reels[unique].digital), parseFloat(cuts[i].rate.timebase));
-				film.reels[unique].deviate = 0;
-				film.reels[unique].C = 0;
-				film.reels[unique].filename = null;
-				film.reels[unique].framerate = parseFloat(cuts[i].rate.timebase);
-				if (film.reels[unique].framerate === 30) {
-					film.reels[unique].framerate = 29.97;
+		$('#uploadFile').fadeOut('560');
+		$('#keycodeEntry').delay('560').fadeIn('600');
+		var storeCheck = $.jStorage.get('reels'),
+			reelStore;
+		if (storeCheck !== null && storeCheck !== undefined && storeCheck !== "[]") {
+			reelStore = JSON.parse(storeCheck);
+			for (var i in film.reels) {
+				var keyName = film.reels[i].name,
+				keyLength = film.reels[i].digital;
+				if (reelStore[keyName] !== undefined && reelStore[keyName] !== null) {
+					if (reelStore[keyName].duration == keyLength) {
+						film.reels[i] = reelStore[keyName];
+					}
 				}
 			}
-			//Isolate cuts, put into objects/arrays
-			film.cuts[i] = {};
-			film.cuts[i].type = 'cut';
-			film.cuts[i].index = parseInt(i);
-			film.cuts[i].id = uuid();
-
-			film.cuts[i].reel = cuts[i].name;
-			film.cuts[i].digital = {
-				'i' : parseInt(cuts[i].in),
-				'o' : parseInt(cuts[i].out)
-			};
-			film.cuts[i].feet = {'i' : null, 'o' : null};
-			film.cuts[i].keycode = {'i':null,'o':null};
-			//film.cuts[i].realtime = {'i' : null, 'o' : null};
-			film.cuts[i].timecode = {
-				'i' : toTimecode(cuts[i].in, cuts[i].rate.timebase),
-				'o' : toTimecode(cuts[i].out, cuts[i].rate.timebase)
-			};
-			film.cuts[i].deviate = 0;
-			film.cuts[i].location = {
-				'start' : parseInt(cuts[i].start),
-				'end' : parseInt(cuts[i].end)
-			};
 		}
-		detectBlack();
-		dataInput();
-	}
-	return false;
-	}
-}
 
-//update sidebar ui
-//@returns: layout of forms to accept keycode data
-var dataInput = function () {
-	'use strict';
-	//console.dir(film);
-	$('#uploadFile').fadeOut('560');
-	$('#keycodeEntry').delay('560').fadeIn('600');
-	var storeCheck = $.jStorage.get('reels'),
-		reelStore;
-	if (storeCheck !== null && storeCheck !== undefined && storeCheck !== "[]") {
-		reelStore = JSON.parse(storeCheck);
+		$('#keycodeEntry').empty();
+		$('#keycodeInput').tmpl(film.reels).appendTo('#keycodeEntry');
 		for (var i in film.reels) {
-			var keyName = film.reels[i].name,
-			keyLength = film.reels[i].digital;
-			if (reelStore[keyName] !== undefined && reelStore[keyName] !== null) {
-				if (reelStore[keyName].duration == keyLength) {
-					film.reels[i] = reelStore[keyName];
+			if (film.reels[i].keycode.i !== null && film.reels[i].keycode.o !== null) {
+				updateCuts[film.reels[i]];
+			}
+		}
+		//events
+		$('.keycodeSave').click(function () {
+	    	WP.saveKeycode($(this));
+	  	});
+	  	$('.keycodeInput input').change(function () {
+	  		if ($(this).val().length > 14) {
+	  			$(this).addClass('filled');
+	  			if ($(this).parent().parent().find('.i').hasClass('filled') && $(this).parent().parent().find('.o').hasClass('filled')) {
+					$(this).parent().parent().find('.keycodeSave').removeClass('disabled');
+	  			} else {
+	  				$(this).parent().parent().find('.keycodeSave').addClass('disabled');
+	  			}
+	  			
+	  		}
+
+	  	});
+		return false;
+	},
+	//@param: $elem - jQuery object, passed as $(this) from click event
+	//@returns: WP.updateCuts(reel)
+	saveKeycode : function ($elem) {
+		'use strict';
+		var container = $elem.parent(),
+			id = container.attr('id'),
+			realId = id.split('inputID-');
+		for (var i in film.reels) {
+			if (film.reels[i].id === realId[1]) {
+				var inVal = normalDisplay(normal(container.find('.i').val())),
+					outVal = normalDisplay(normal(container.find('.o').val()));
+				film.reels[i].keycode.i = inVal;
+				film.reels[i].keycode.o = outVal;
+				var inSplit = inVal.split(' '),
+					outSplit = outVal.split(' ');
+				film.reels[i].frames = fromKey(outSplit[2]) - fromKey(inSplit[2]);
+				film.reels[i].footage = toFeet(film.reels[i].frames);
+				film.reels[i].realtime = film.reels[i].frames * (1 / 24);
+				film.reels[i] = compare(film.reels[i]);
+				//WP.storeReel(film.reels[i]);
+				WP.updateCuts(film.reels[i]);
+				break;
+			}
+		}
+	},
+	//Analyzes existing film.cuts Array for gaps in location values (which determine
+	//where on the sequence the cut is placed) 
+	//@returns: film.cuts - adds new cuts to Array within film object
+	detectBlack : function () {
+		'use strict';
+		var prev = {},
+			black = [];
+		for (var i in film.cuts) {
+			//console.log('IN: ' + film.cuts[i].location.start);
+			//console.log('OUT: ' + film.cuts[i].location.end);
+			if (prev.o !== film.cuts[i].location.start && prev.o !== undefined) {
+				var obj = {
+					deviate : 0,
+					digital : {
+						i : 0,
+						o : 0
+					},
+					id : uuid(),
+					index : 0,
+					keycode : {
+						i : ['    ','    ','    '],
+						o : ['    ','    ','    ']
+					},
+					location : {
+						start : prev.o,
+						end : film.cuts[i].location.start
+					},
+					reel : "*BLACK*",
+					feet : {
+						i : '',
+						o : ''
+					},
+					timecode : {
+						i : '',
+						o : ''
+					},
+					type : "cut"
+				};
+				black.push(obj);
+			}
+			prev.i = film.cuts[i].location.start;
+			prev.o = film.cuts[i].location.end;
+		}
+		for (var i in black) {
+			film.cuts.push(black[i]);
+		}
+		film.cuts.sort(sortCuts);
+	},
+	//Corrects black segments with data derived from 
+	correctBlack : function () {
+		var totalBlack = 0,
+			videoBlack = 0,
+			rate = 29.97;
+		for (var i in film.cuts) {
+			if (film.cuts[i].reel === '*BLACK*') {
+				if (i === 0) {
+					film.cuts[i].C = film.cuts[i+1].C;
+					film.cuts[i].framerate = film.cuts[i+1].framerate;
+				} else {
+					film.cuts[i].C = film.cuts[i-1].C;
+					film.cuts[i].framerate = film.cuts[i-1].framerate;
 				}
+				film.cuts[i].frames = {};
+				film.cuts[i].frames.i = 0;
+				film.cuts[i].frames.o = correct(pulldown(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate), film.cuts[i].C)
+				film.cuts[i].digital.i = 0;
+				film.cuts[i].digital.o = film.cuts[i].location.end - film.cuts[i].location.start;
+				film.cuts[i].timecode.i = toTimecode(0,film.cuts[i].framerate);
+				film.cuts[i].timecode.o = toTimecode(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate);
+				film.cuts[i].feet.i = toFeet(0);
+				film.cuts[i].feet.o = toFeet(film.cuts[i].frames.o);
+				totalBlack += film.cuts[i].frames.o;
+				videoBlack += film.cuts[i].digital.o;
+				//Whatever the last one is, likely the same as all of them
+				rate = film.cuts[i].framerate;
+				console.dir(film.cuts[i]);
 			}
 		}
-	}
-
-	$('#keycodeEntry').empty();
-	$('#keycodeInput').tmpl(film.reels).appendTo('#keycodeEntry');
-	for (var i in film.reels) {
-		if (film.reels[i].keycode.i !== null && film.reels[i].keycode.o !== null) {
-			updateCuts[film.reels[i]];
-		}
-	}
-	//events
-	$('.keycodeSave').click(function () {
-    	saveKeycode($(this));
-  	});
-  	$('.keycodeInput input').change(function () {
-  		if ($(this).val().length > 14) {
-  			$(this).addClass('filled');
-  			if ($(this).parent().parent().find('.i').hasClass('filled') && $(this).parent().parent().find('.o').hasClass('filled')) {
-				$(this).parent().parent().find('.keycodeSave').removeClass('disabled');
-  			} else {
-  				$(this).parent().parent().find('.keycodeSave').addClass('disabled');
-  			}
-  			
-  		}
-
-  	});
-	return false;
-}
-
-//@param: $elem - jQuery object, passed as $(this) from click event
-//@returns: updateCuts(reel)
-var saveKeycode = function ($elem) {
-	'use strict';
-	var container = $elem.parent(),
-		id = container.attr('id'),
-		realId = id.split('inputID-');
-	for (var i in film.reels) {
-		if (film.reels[i].id === realId[1]) {
-			var inVal = normalDisplay(normal(container.find('.i').val())),
-				outVal = normalDisplay(normal(container.find('.o').val()));
-			film.reels[i].keycode.i = inVal;
-			film.reels[i].keycode.o = outVal;
-			var inSplit = inVal.split(' '),
-				outSplit = outVal.split(' ');
-			film.reels[i].frames = fromKey(outSplit[2]) - fromKey(inSplit[2]);
-			film.reels[i].footage = toFeet(film.reels[i].frames);
-			film.reels[i].realtime = film.reels[i].frames * (1 / 24);
-			film.reels[i] = compare(film.reels[i]);
-			//storeReel(film.reels[i]);
-			updateCuts(film.reels[i]);
-			break;
-		}
-	}
-
-}
-
-//Analyzes existing film.cuts Array for gaps in location values (which determine
-//where on the sequence the cut is placed) 
-//@returns: film.cuts - adds new cuts to Array within film object
-var detectBlack = function () {
-	'use strict';
-	var prev = {},
-		black = [];
-	for (var i in film.cuts) {
-		//console.log('IN: ' + film.cuts[i].location.start);
-		//console.log('OUT: ' + film.cuts[i].location.end);
-		if (prev.o !== film.cuts[i].location.start && prev.o !== undefined) {
-			var obj = {
-				deviate : 0,
-				digital : {
-					i : 0,
-					o : 0
-				},
-				id : uuid(),
-				index : 0,
+		if (totalBlack !== 0) {
+			var blackReel = {
+				frames : totalBlack,
+				footage : toFeet(totalBlack),
+				digital : videoBlack,
+				timecode : toTimecode(videoBlack,film.cuts[i].framerate),
+				name : '*BLACK*',
+				framerate : rate,
 				keycode : {
-					i : ['    ','    ','    '],
-					o : ['    ','    ','    ']
-				},
-				location : {
-					start : prev.o,
-					end : film.cuts[i].location.start
-				},
-				reel : "*BLACK*",
-				feet : {
 					i : '',
 					o : ''
 				},
-				timecode : {
-					i : '',
-					o : ''
-				},
-				type : "cut"
-			};
-			black.push(obj);
-		}
-		prev.i = film.cuts[i].location.start;
-		prev.o = film.cuts[i].location.end;
-	}
-	for (var i in black) {
-		film.cuts.push(black[i]);
-	}
-	film.cuts.sort(sortCuts);
-}
-
-//Corrects black segments with data derived from 
-var correctBlack = function () {
-	var totalBlack = 0,
-		videoBlack = 0,
-		rate = 29.97;
-	for (var i in film.cuts) {
-		if (film.cuts[i].reel === '*BLACK*') {
-			if (i === 0) {
-				film.cuts[i].C = film.cuts[i+1].C;
-				film.cuts[i].framerate = film.cuts[i+1].framerate;
-			} else {
-				film.cuts[i].C = film.cuts[i-1].C;
-				film.cuts[i].framerate = film.cuts[i-1].framerate;
+				deviate : totalBlack - pulldown(videoBlack, rate),
+				C : (totalBlack - pulldown(videoBlack, rate)) / totalBlack
 			}
-			film.cuts[i].frames = {};
-			film.cuts[i].frames.i = 0;
-			film.cuts[i].frames.o = correct(pulldown(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate), film.cuts[i].C)
-			film.cuts[i].digital.i = 0;
-			film.cuts[i].digital.o = film.cuts[i].location.end - film.cuts[i].location.start;
-			film.cuts[i].timecode.i = toTimecode(0,film.cuts[i].framerate);
-			film.cuts[i].timecode.o = toTimecode(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate);
-			film.cuts[i].feet.i = toFeet(0);
-			film.cuts[i].feet.o = toFeet(film.cuts[i].frames.o);
-			totalBlack += film.cuts[i].frames.o;
-			videoBlack += film.cuts[i].digital.o;
-			//Whatever the last one is, likely the same as all of them
-			rate = film.cuts[i].framerate;
-			console.dir(film.cuts[i]);
+			film.reels.push(blackReel);
 		}
-	}
-	if (totalBlack !== 0) {
-		var blackReel = {
-			frames : totalBlack,
-			footage : toFeet(totalBlack),
-			digital : videoBlack,
-			timecode : toTimecode(videoBlack,film.cuts[i].framerate),
-			name : '*BLACK*',
-			framerate : rate,
-			keycode : {
-				i : '',
-				o : ''
-			},
-			deviate : totalBlack - pulldown(videoBlack, rate),
-			C : (totalBlack - pulldown(videoBlack, rate)) / totalBlack
+	},
+	//@returns: jStorage key "reels"
+	storeReel : function (reel) {
+		'use strict';
+		var storeCheck = $.jStorage.get("reels"),
+			reelStore = {};
+		console.dir(storeCheck);
+		reelStore = JSON.parse(storeCheck);
+		if(reelStore === null){
+			reelStore = {0:[]};
 		}
-		film.reels.push(blackReel);
+		reelStore[0][reel.name] = reel;
+		console.dir(reelStore);
+		var reelString = JSON.stringify(reelStore);
+		$.jStorage.set("reels",reelString);
+		return false;
+	},
+	//Traverses film.cuts Array and updates the ones that name match the reel
+	//@returns: modified film.cuts Array
+	updateCuts : function (reel) {
+		'use strict';
+		//change display
+		var $disp = $('#inputID-' + reel.id);
+		$disp.addClass('savedKeycode');
+		$disp.find('input.i').hide();
+		$disp.find('.enteredText.i').text(reel.keycode.i).show();
+		$disp.find('input.o').hide();
+		$disp.find('.enteredText.o').text(reel.keycode.o).show();
+		$disp.find('.footageEst').text(reel.footage);
+		$disp.find('.keycodeSave').addClass('disabled');
+		//change cuts
+		for (var i in film.cuts) {
+			if (film.cuts[i].reel === reel.name) {
+				var keyI = reel.keycode.i.split(" "),
+					keyBase = keyI[0] + ' ' + keyI[1] + ' ',
+					frameBase = fromKey(keyI[2]),
+					digitalIn = 0, 
+					digitalOut = 0;
+					digitalIn = correct(pulldown(film.cuts[i].digital.i, reel.framerate), reel.C);
+					digitalOut = correct(pulldown(film.cuts[i].digital.o, reel.framerate), reel.C);
+				film.cuts[i].frames = {
+					"i" : digitalIn,
+					"o" : digitalOut
+				};
+				film.cuts[i].keycode.i = keyBase + toKey(frameBase + digitalIn);
+				film.cuts[i].keycode.o = keyBase + toKey(frameBase + digitalOut);
+				film.cuts[i].deviate = Math.round(reel.C * (digitalOut - digitalIn));
+				film.cuts[i].feet.i = toFeet(digitalIn);
+				film.cuts[i].feet.o = toFeet(digitalOut);
+				film.cuts[i].framerate = reel.framerate;
+				film.cuts[i].C = reel.C;
+			}
+		}
+		var allSaved = true;
+		$('.keycodeInput').each(function () {
+			if (!$(this).hasClass('savedKeycode')) {
+				allSaved = false;
+			};
+		});
+		if (allSaved) {
+			WP.displayCutlist();
+		}
+	},
+	displayCutlist : function () {
+		'use strict';
+		WP.correctBlack();
+		$('#keycodeEntry').fadeOut(482);
+		$('#cutlist table tbody').empty();
+		film.cuts = reIndex(film.cuts);
+		for(var i in film.cuts){
+			if(film.cuts[i].reel !== '*BLACK*') {
+				film.cuts[i].keycode.i = normalArray(film.cuts[i].keycode.i);
+				film.cuts[i].keycode.o = normalArray(film.cuts[i].keycode.o);
+			}
+		}
+		$('#cutDisplay').tmpl(film.cuts).appendTo('#cutlist table tbody');
+		$('#cutlist').fadeIn(570);
+		$('#reels table tbody').empty();
+		$('#reelDisplay').tmpl(film.reels).appendTo('#reels table tbody');
+		$('#reels').fadeIn(530);
+		return false;
 	}
 }
 
@@ -381,91 +392,6 @@ var correct = function (frames, C) {
 var pulldown = function (d, framerate) {
 	'use strict';
 	return Math.floor((d/framerate) * 24);
-}
-
-//@returns: jStorage key "reels"
-var storeReel = function (reel) {
-	'use strict';
-	var storeCheck = $.jStorage.get("reels"),
-		reelStore = {};
-	console.dir(storeCheck);
-	reelStore = JSON.parse(storeCheck);
-	if(reelStore === null){
-		reelStore = {0:[]};
-	}
-	reelStore[0][reel.name] = reel;
-	console.dir(reelStore);
-	var reelString = JSON.stringify(reelStore);
-	$.jStorage.set("reels",reelString);
-	return false;
-}
-
-//Traverses film.cuts Array and updates the ones that name match the reel
-//@returns: modified film.cuts Array
-var updateCuts = function (reel) {
-	'use strict';
-	//change display
-	var $disp = $('#inputID-' + reel.id);
-	$disp.addClass('savedKeycode');
-	$disp.find('input.i').hide();
-	$disp.find('.enteredText.i').text(reel.keycode.i).show();
-	$disp.find('input.o').hide();
-	$disp.find('.enteredText.o').text(reel.keycode.o).show();
-	$disp.find('.footageEst').text(reel.footage);
-	$disp.find('.keycodeSave').addClass('disabled');
-	//change cuts
-	for (var i in film.cuts) {
-		if (film.cuts[i].reel === reel.name) {
-			var keyI = reel.keycode.i.split(" "),
-				keyBase = keyI[0] + ' ' + keyI[1] + ' ',
-				frameBase = fromKey(keyI[2]),
-				digitalIn = 0, 
-				digitalOut = 0;
-				digitalIn = correct(pulldown(film.cuts[i].digital.i, reel.framerate), reel.C);
-				digitalOut = correct(pulldown(film.cuts[i].digital.o, reel.framerate), reel.C);
-			film.cuts[i].frames = {
-				"i" : digitalIn,
-				"o" : digitalOut
-			};
-			film.cuts[i].keycode.i = keyBase + toKey(frameBase + digitalIn);
-			film.cuts[i].keycode.o = keyBase + toKey(frameBase + digitalOut);
-			film.cuts[i].deviate = Math.round(reel.C * (digitalOut - digitalIn));
-			film.cuts[i].feet.i = toFeet(digitalIn);
-			film.cuts[i].feet.o = toFeet(digitalOut);
-			film.cuts[i].framerate = reel.framerate;
-			film.cuts[i].C = reel.C;
-		}
-	}
-	var allSaved = true;
-	$('.keycodeInput').each(function () {
-		if (!$(this).hasClass('savedKeycode')) {
-			allSaved = false;
-		};
-	});
-	if (allSaved) {
-		displayCutlist();
-	}
-}
-
-//
-var displayCutlist = function () {
-	'use strict';
-	correctBlack();
-	$('#keycodeEntry').fadeOut(482);
-	$('#cutlist table tbody').empty();
-	film.cuts = reIndex(film.cuts);
-	for(var i in film.cuts){
-		if(film.cuts[i].reel !== '*BLACK*') {
-			film.cuts[i].keycode.i = normalArray(film.cuts[i].keycode.i);
-			film.cuts[i].keycode.o = normalArray(film.cuts[i].keycode.o);
-		}
-	}
-	$('#cutDisplay').tmpl(film.cuts).appendTo('#cutlist table tbody');
-	$('#cutlist').fadeIn(570);
-	$('#reels table tbody').empty();
-	$('#reelDisplay').tmpl(film.reels).appendTo('#reels table tbody');
-	$('#reels').fadeIn(530);
-	return false;
 }
 
 //gives a reneral estimate of the length of the roll, probably good within 3-5 frames for 100' rolls
@@ -654,6 +580,74 @@ var sortCuts = function (a, b) {
 	}
 	return 0;
 }
+
+/*
+OBJECT STRUCTURE
+var reel = {
+	"type" : "reel",
+	"id" : uuid,
+    "name" : "",
+    "keycode" : {
+    	"i" : "EM70 0218 7804+16", 
+   		"o" : "EM70 0218 7806+00"
+   		},
+    "frames" : 4000, //real film frames
+    "footage" : "0000+00'", 
+    "rough" : 0+00', //generate
+    "realtime" : 0000000000, //in milliseconds for @24fps
+    "digital" : 5000,
+    "timecode" : "00:00;00" //@framerate NON-ESSENTIAL
+    "deviate" : -2,
+    "C" : 0.0000, //float value almost always, correction value for digital cuts
+    "filename" : "",
+    "framerate" : 29.97
+}
+
+//cuts to be stored in an array within a film object
+var cut = {
+	"type" : "cut",
+	"id" : uuid,
+	"reelObj" : {}, //Full object or...
+	"reel" : 'reference uuid',
+	digital : { //video frames
+		"i" : 0,
+		"o" : 3400
+		},
+	frames : {
+		"i" : 0, 
+		"o" 2300
+		},
+	feet : {
+		"i" : "0+00'", 
+		"o" : "20+00'"
+		},
+	keycode : {
+		"i" : "XXXX 0000 0000+00", 
+		"o" : "XXXX 0000 0000+00"
+	},
+	realtime : { //very very non-essential, maybe not supported
+		"i" : 0000000, //millis
+		"o" : 0011011 //@24fps
+	},
+	timecode : { //represented at framerate grabbed from the object
+		"i" : "00:00:00",
+		"o" : "00:00:00"
+	}
+	"deviate" : 0, //frames of deviation d/a occuring within the cut, determined by length
+	location : { //location in sequence, digital value, to be converted, valuable for determining black space... hmmm
+		"start" : 0,
+		"end" : 100
+	}
+}
+
+var film = {
+	"type" : "film",
+	"id" : uuid,
+	"cuts" : [],
+	"reels" : [],
+	"name" : "title"
+}
+*/
 
 /*
 Copyright (c) 2012 Matthew McWilliams matt@sixteenmillimeter.com
