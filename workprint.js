@@ -47,13 +47,13 @@ var film = {},
 				var cuts = [],
 					reels = [],
 					keys = [];
-				if (WP.isArray(obj.sequence.media.video.track)){
+				if (this.isArray(obj.sequence.media.video.track)){
 					for (var i in obj.sequence.media.video.track) {
 						if (obj.sequence.media.video.track[i].clipitem !== undefined) {
 							cuts = cuts.concat(obj.sequence.media.video.track[i].clipitem);
 						}
 					}
-					cuts.sort(WP.sortTracks);
+					cuts.sort(this.sortTracks);
 				} else {
 					cuts = obj.sequence.media.video.track.clipitem;
 				}
@@ -77,10 +77,10 @@ var film = {},
 						film.reels[unique].keycode = {'i':null,'o':null};
 						film.reels[unique].frames = null;
 						film.reels[unique].footage = null;
-						film.reels[unique].rough = WP.toRough((parseInt(cuts[i].duration) - 1), parseFloat(cuts[i].rate.timebase));
+						film.reels[unique].rough = this.toRough((parseInt(cuts[i].duration) - 1), parseFloat(cuts[i].rate.timebase));
 						film.reels[unique].realtime = null;
 						film.reels[unique].digital = parseInt(cuts[i].duration) - 1; //SUBTRACTING 1 FROM FCP REPORTED LENGTH, so 0 = 0 not 0 = 1
-						film.reels[unique].timecode = WP.toTimecode(parseInt(film.reels[unique].digital), parseFloat(cuts[i].rate.timebase));
+						film.reels[unique].timecode = this.toTimecode(parseInt(film.reels[unique].digital), parseFloat(cuts[i].rate.timebase));
 						film.reels[unique].deviate = 0;
 						film.reels[unique].C = 0;
 						film.reels[unique].filename = null;
@@ -104,8 +104,8 @@ var film = {},
 					film.cuts[i].keycode = {'i':null,'o':null};
 					//film.cuts[i].realtime = {'i' : null, 'o' : null};
 					film.cuts[i].timecode = {
-						'i' : WP.toTimecode(cuts[i].in, cuts[i].rate.timebase),
-						'o' : WP.toTimecode(cuts[i].out, cuts[i].rate.timebase)
+						'i' : this.toTimecode(cuts[i].in, cuts[i].rate.timebase),
+						'o' : this.toTimecode(cuts[i].out, cuts[i].rate.timebase)
 					};
 					film.cuts[i].deviate = 0;
 					film.cuts[i].location = {
@@ -113,8 +113,8 @@ var film = {},
 						'end' : parseInt(cuts[i].end)
 					};
 				}
-				WP.detectBlack();
-				WP.dataInput();
+				this.detectBlack();
+				this.dataInput();
 			}
 			return false;
 		}
@@ -167,7 +167,7 @@ var film = {},
 		return false;
 	},
 	//@param: $elem - jQuery object, passed as $(this) from click event
-	//@returns: WP.updateCuts(reel)
+	//@returns: this.updateCuts(reel)
 	saveKeycode : function ($elem) {
 		'use strict';
 		var container = $elem.parent(),
@@ -175,18 +175,18 @@ var film = {},
 			realId = id.split('inputID-');
 		for (var i in film.reels) {
 			if (film.reels[i].id === realId[1]) {
-				var inVal = WP.normalDisplay(WP.normal(container.find('.i').val())),
-					outVal = WP.normalDisplay(WP.normal(container.find('.o').val()));
+				var inVal = this.normalDisplay(this.normal(container.find('.i').val())),
+					outVal = this.normalDisplay(this.normal(container.find('.o').val()));
 				film.reels[i].keycode.i = inVal;
 				film.reels[i].keycode.o = outVal;
 				var inSplit = inVal.split(' '),
 					outSplit = outVal.split(' ');
-				film.reels[i].frames = WP.fromKey(outSplit[2]) - WP.fromKey(inSplit[2]);
-				film.reels[i].footage = WP.toFeet(film.reels[i].frames);
+				film.reels[i].frames = this.fromKey(outSplit[2]) - this.fromKey(inSplit[2]);
+				film.reels[i].footage = this.toFeet(film.reels[i].frames);
 				film.reels[i].realtime = film.reels[i].frames * (1 / 24);
-				film.reels[i] = WP.compare(film.reels[i]);
-				//WP.storeReel(film.reels[i]);
-				WP.updateCuts(film.reels[i]);
+				film.reels[i] = this.compare(film.reels[i]);
+				//this.storeReel(film.reels[i]);
+				this.updateCuts(film.reels[i]);
 				break;
 			}
 		}
@@ -237,7 +237,7 @@ var film = {},
 		for (var i in black) {
 			film.cuts.push(black[i]);
 		}
-		film.cuts.sort(WP.sortCuts);
+		film.cuts.sort(this.sortCuts);
 	},
 	//Corrects cuts of blackness to match the rolls
 	//preceding and following the cut
@@ -256,13 +256,13 @@ var film = {},
 				}
 				film.cuts[i].frames = {};
 				film.cuts[i].frames.i = 0;
-				film.cuts[i].frames.o = WP.correct(WP.pulldown(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate), film.cuts[i].C)
+				film.cuts[i].frames.o = this.correct(this.pulldown(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate), film.cuts[i].C)
 				film.cuts[i].digital.i = 0;
 				film.cuts[i].digital.o = film.cuts[i].location.end - film.cuts[i].location.start;
-				film.cuts[i].timecode.i = WP.toTimecode(0,film.cuts[i].framerate);
-				film.cuts[i].timecode.o = WP.toTimecode(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate);
-				film.cuts[i].feet.i = WP.toFeet(0);
-				film.cuts[i].feet.o = WP.toFeet(film.cuts[i].frames.o);
+				film.cuts[i].timecode.i = this.toTimecode(0,film.cuts[i].framerate);
+				film.cuts[i].timecode.o = this.toTimecode(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate);
+				film.cuts[i].feet.i = this.toFeet(0);
+				film.cuts[i].feet.o = this.toFeet(film.cuts[i].frames.o);
 				totalBlack += film.cuts[i].frames.o;
 				videoBlack += film.cuts[i].digital.o;
 				//Whatever the last one is, likely the same as all of them
@@ -273,17 +273,17 @@ var film = {},
 		if (totalBlack !== 0) {
 			var blackReel = {
 				frames : totalBlack,
-				footage : WP.toFeet(totalBlack),
+				footage : this.toFeet(totalBlack),
 				digital : videoBlack,
-				timecode : WP.toTimecode(videoBlack,film.cuts[i].framerate),
+				timecode : this.toTimecode(videoBlack,film.cuts[i].framerate),
 				name : '*BLACK*',
 				framerate : rate,
 				keycode : {
 					i : '',
 					o : ''
 				},
-				deviate : totalBlack - WP.pulldown(videoBlack, rate),
-				C : (totalBlack - WP.pulldown(videoBlack, rate)) / totalBlack
+				deviate : totalBlack - this.pulldown(videoBlack, rate),
+				C : (totalBlack - this.pulldown(videoBlack, rate)) / totalBlack
 			}
 			film.reels.push(blackReel);
 		}
@@ -322,20 +322,20 @@ var film = {},
 			if (film.cuts[i].reel === reel.name) {
 				var keyI = reel.keycode.i.split(" "),
 					keyBase = keyI[0] + ' ' + keyI[1] + ' ',
-					frameBase = WP.fromKey(keyI[2]),
+					frameBase = this.fromKey(keyI[2]),
 					digitalIn = 0, 
 					digitalOut = 0;
-					digitalIn = WP.correct(WP.pulldown(film.cuts[i].digital.i, reel.framerate), reel.C);
-					digitalOut = WP.correct(WP.pulldown(film.cuts[i].digital.o, reel.framerate), reel.C);
+					digitalIn = this.correct(this.pulldown(film.cuts[i].digital.i, reel.framerate), reel.C);
+					digitalOut = this.correct(this.pulldown(film.cuts[i].digital.o, reel.framerate), reel.C);
 				film.cuts[i].frames = {
 					"i" : digitalIn,
 					"o" : digitalOut
 				};
-				film.cuts[i].keycode.i = keyBase + WP.toKey(frameBase + digitalIn);
-				film.cuts[i].keycode.o = keyBase + WP.toKey(frameBase + digitalOut);
+				film.cuts[i].keycode.i = keyBase + this.toKey(frameBase + digitalIn);
+				film.cuts[i].keycode.o = keyBase + this.toKey(frameBase + digitalOut);
 				film.cuts[i].deviate = Math.round(reel.C * (digitalOut - digitalIn));
-				film.cuts[i].feet.i = WP.toFeet(digitalIn);
-				film.cuts[i].feet.o = WP.toFeet(digitalOut);
+				film.cuts[i].feet.i = this.toFeet(digitalIn);
+				film.cuts[i].feet.o = this.toFeet(digitalOut);
 				film.cuts[i].framerate = reel.framerate;
 				film.cuts[i].C = reel.C;
 			}
@@ -347,20 +347,20 @@ var film = {},
 			};
 		});
 		if (allSaved) {
-			WP.displayCutlist();
+			this.displayCutlist();
 		}
 	},
 	// Renders cutlist
 	displayCutlist : function () {
 		'use strict';
-		WP.correctBlack();
+		this.correctBlack();
 		$('#keycodeEntry').fadeOut(482);
 		$('#cutlist table tbody').empty();
-		film.cuts = WP.reIndex(film.cuts);
+		film.cuts = this.reIndex(film.cuts);
 		for(var i in film.cuts){
 			if(film.cuts[i].reel !== '*BLACK*') {
-				film.cuts[i].keycode.i = WP.normalArray(film.cuts[i].keycode.i);
-				film.cuts[i].keycode.o = WP.normalArray(film.cuts[i].keycode.o);
+				film.cuts[i].keycode.i = this.normalArray(film.cuts[i].keycode.i);
+				film.cuts[i].keycode.o = this.normalArray(film.cuts[i].keycode.o);
 			}
 		}
 		$('#cutDisplay').tmpl(film.cuts).appendTo('#cutlist table tbody');
@@ -391,7 +391,7 @@ var film = {},
 	//@returns: Array
 	normalArray : function (key) {
 		'use strict';
-	    key = WP.normal(key);
+	    key = this.normal(key);
 	    var rtnArr = [];
 	    rtnArr[0] = key.substring(0, 4);
 	    rtnArr[1] = key.substring(4, 8);
@@ -407,7 +407,7 @@ var film = {},
 			return val[0] + ' ' + val[1] + ' ' + val[2];
 		} else if (typeof val === 'string') {
 			if (val.length !== 15) {
-				val = WP.normal(val);
+				val = this.normal(val);
 			}
 			return val.substring(0, 4) + ' ' + val.substring(4, 8) + ' ' + val.substring(8, 15);
 		}
@@ -416,7 +416,7 @@ var film = {},
 	//@returns: object with corrections applied
 	compare : function (reel) {
 		'use strict';
-		reel.deviate = reel.frames - WP.pulldown(reel.digital, reel.framerate);
+		reel.deviate = reel.frames - this.pulldown(reel.digital, reel.framerate);
 		reel.C = reel.deviate / reel.frames;
 		return reel;
 	},
@@ -440,7 +440,7 @@ var film = {},
 	toRough : function (frames, framerate) {
 		'use strict';
 		var n = Math.floor((frames/framerate) * 24);
-		return WP.toFeet(n);
+		return this.toFeet(n);
 	},
 	//toTimecode all that is needed for now
 	//@param: frames - integer
@@ -455,11 +455,11 @@ var film = {},
 		var first = Math.floor(frames/rate);
 		if(first > 60) {
 			var second = Math.floor(first/60);
-			str += WP.zeroPad(second, 2) + ':' + WP.zeroPad(first % 60, 2);
+			str += this.zeroPad(second, 2) + ':' + this.zeroPad(first % 60, 2);
 		}else{
-			str += '00:'+WP.zeroPad(first, 2);
+			str += '00:'+this.zeroPad(first, 2);
 		}
-		str += ';' + WP.zeroPad(frames % rate, 2);
+		str += ';' + this.zeroPad(frames % rate, 2);
 		return str;
 	},
 	//All feet measurements must be marked with trailing '
@@ -480,11 +480,11 @@ var film = {},
 	toFeet : function (frames, start) {
 		'use strict';
 		if (start !== null && start !== undefined && start !== "0+00'") {
-			frames += WP.fromFeet(start);
+			frames += this.fromFeet(start);
 		}
 	    var feet = Math.floor(frames / 40);
 	    frames = frames % 40;
-	    return feet + '+' + WP.zeroPad(frames, 2) + "'";
+	    return feet + '+' + this.zeroPad(frames, 2) + "'";
 	},
 	//to integer from 7 character format
 	//@param: frames - integer
@@ -493,11 +493,11 @@ var film = {},
 	toKey : function (frames, start) {
 		'use strict';
 		if (start !== null && start !== undefined && start !== '0000+00') {
-			frames += WP.fromKey(start);
+			frames += this.fromKey(start);
 		}
 	    var first = Math.floor(frames / 20),
 	        second = frames % 20;
-	    return WP.zeroPad(first, 4) + '+' + WP.zeroPad(second, 2);
+	    return this.zeroPad(first, 4) + '+' + this.zeroPad(second, 2);
 	},
 	//Always represented in padded values
 	//@param: key - formatted String (0000+00)
