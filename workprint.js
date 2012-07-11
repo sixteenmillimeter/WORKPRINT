@@ -38,22 +38,22 @@ $('#uploadFile').ajaxForm({
 
 var film = {},
 	WP = {
-
 		build : function (obj) {
 			'use strict';
 			if (obj!= false && obj !== undefined) {
 				if (obj['@attributes'].version === "5" || obj['@attributes'].version === "4") {
+				console.log('XML2JSON:')
 				console.dir(obj);
 				var cuts = [],
 					reels = [],
 					keys = [];
-				if (isArray(obj.sequence.media.video.track)){
+				if (WP.isArray(obj.sequence.media.video.track)){
 					for (var i in obj.sequence.media.video.track) {
 						if (obj.sequence.media.video.track[i].clipitem !== undefined) {
 							cuts = cuts.concat(obj.sequence.media.video.track[i].clipitem);
 						}
 					}
-					cuts.sort(sortTracks);
+					cuts.sort(WP.sortTracks);
 				} else {
 					cuts = obj.sequence.media.video.track.clipitem;
 				}
@@ -77,10 +77,10 @@ var film = {},
 						film.reels[unique].keycode = {'i':null,'o':null};
 						film.reels[unique].frames = null;
 						film.reels[unique].footage = null;
-						film.reels[unique].rough = toRough((parseInt(cuts[i].duration) - 1), parseFloat(cuts[i].rate.timebase));
+						film.reels[unique].rough = WP.toRough((parseInt(cuts[i].duration) - 1), parseFloat(cuts[i].rate.timebase));
 						film.reels[unique].realtime = null;
 						film.reels[unique].digital = parseInt(cuts[i].duration) - 1; //SUBTRACTING 1 FROM FCP REPORTED LENGTH, so 0 = 0 not 0 = 1
-						film.reels[unique].timecode = toTimecode(parseInt(film.reels[unique].digital), parseFloat(cuts[i].rate.timebase));
+						film.reels[unique].timecode = WP.toTimecode(parseInt(film.reels[unique].digital), parseFloat(cuts[i].rate.timebase));
 						film.reels[unique].deviate = 0;
 						film.reels[unique].C = 0;
 						film.reels[unique].filename = null;
@@ -104,8 +104,8 @@ var film = {},
 					film.cuts[i].keycode = {'i':null,'o':null};
 					//film.cuts[i].realtime = {'i' : null, 'o' : null};
 					film.cuts[i].timecode = {
-						'i' : toTimecode(cuts[i].in, cuts[i].rate.timebase),
-						'o' : toTimecode(cuts[i].out, cuts[i].rate.timebase)
+						'i' : WP.toTimecode(cuts[i].in, cuts[i].rate.timebase),
+						'o' : WP.toTimecode(cuts[i].out, cuts[i].rate.timebase)
 					};
 					film.cuts[i].deviate = 0;
 					film.cuts[i].location = {
@@ -175,16 +175,16 @@ var film = {},
 			realId = id.split('inputID-');
 		for (var i in film.reels) {
 			if (film.reels[i].id === realId[1]) {
-				var inVal = normalDisplay(normal(container.find('.i').val())),
-					outVal = normalDisplay(normal(container.find('.o').val()));
+				var inVal = WP.normalDisplay(WP.normal(container.find('.i').val())),
+					outVal = WP.normalDisplay(WP.normal(container.find('.o').val()));
 				film.reels[i].keycode.i = inVal;
 				film.reels[i].keycode.o = outVal;
 				var inSplit = inVal.split(' '),
 					outSplit = outVal.split(' ');
-				film.reels[i].frames = fromKey(outSplit[2]) - fromKey(inSplit[2]);
-				film.reels[i].footage = toFeet(film.reels[i].frames);
+				film.reels[i].frames = WP.fromKey(outSplit[2]) - WP.fromKey(inSplit[2]);
+				film.reels[i].footage = WP.toFeet(film.reels[i].frames);
 				film.reels[i].realtime = film.reels[i].frames * (1 / 24);
-				film.reels[i] = compare(film.reels[i]);
+				film.reels[i] = WP.compare(film.reels[i]);
 				//WP.storeReel(film.reels[i]);
 				WP.updateCuts(film.reels[i]);
 				break;
@@ -237,9 +237,10 @@ var film = {},
 		for (var i in black) {
 			film.cuts.push(black[i]);
 		}
-		film.cuts.sort(sortCuts);
+		film.cuts.sort(WP.sortCuts);
 	},
-	//Corrects black segments with data derived from 
+	//Corrects cuts of blackness to match the rolls
+	//preceding and following the cut
 	correctBlack : function () {
 		var totalBlack = 0,
 			videoBlack = 0,
@@ -255,34 +256,34 @@ var film = {},
 				}
 				film.cuts[i].frames = {};
 				film.cuts[i].frames.i = 0;
-				film.cuts[i].frames.o = correct(pulldown(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate), film.cuts[i].C)
+				film.cuts[i].frames.o = WP.correct(WP.pulldown(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate), film.cuts[i].C)
 				film.cuts[i].digital.i = 0;
 				film.cuts[i].digital.o = film.cuts[i].location.end - film.cuts[i].location.start;
-				film.cuts[i].timecode.i = toTimecode(0,film.cuts[i].framerate);
-				film.cuts[i].timecode.o = toTimecode(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate);
-				film.cuts[i].feet.i = toFeet(0);
-				film.cuts[i].feet.o = toFeet(film.cuts[i].frames.o);
+				film.cuts[i].timecode.i = WP.toTimecode(0,film.cuts[i].framerate);
+				film.cuts[i].timecode.o = WP.toTimecode(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate);
+				film.cuts[i].feet.i = WP.toFeet(0);
+				film.cuts[i].feet.o = WP.toFeet(film.cuts[i].frames.o);
 				totalBlack += film.cuts[i].frames.o;
 				videoBlack += film.cuts[i].digital.o;
 				//Whatever the last one is, likely the same as all of them
 				rate = film.cuts[i].framerate;
-				console.dir(film.cuts[i]);
+				//console.dir(film.cuts[i]);
 			}
 		}
 		if (totalBlack !== 0) {
 			var blackReel = {
 				frames : totalBlack,
-				footage : toFeet(totalBlack),
+				footage : WP.toFeet(totalBlack),
 				digital : videoBlack,
-				timecode : toTimecode(videoBlack,film.cuts[i].framerate),
+				timecode : WP.toTimecode(videoBlack,film.cuts[i].framerate),
 				name : '*BLACK*',
 				framerate : rate,
 				keycode : {
 					i : '',
 					o : ''
 				},
-				deviate : totalBlack - pulldown(videoBlack, rate),
-				C : (totalBlack - pulldown(videoBlack, rate)) / totalBlack
+				deviate : totalBlack - WP.pulldown(videoBlack, rate),
+				C : (totalBlack - WP.pulldown(videoBlack, rate)) / totalBlack
 			}
 			film.reels.push(blackReel);
 		}
@@ -321,20 +322,20 @@ var film = {},
 			if (film.cuts[i].reel === reel.name) {
 				var keyI = reel.keycode.i.split(" "),
 					keyBase = keyI[0] + ' ' + keyI[1] + ' ',
-					frameBase = fromKey(keyI[2]),
+					frameBase = WP.fromKey(keyI[2]),
 					digitalIn = 0, 
 					digitalOut = 0;
-					digitalIn = correct(pulldown(film.cuts[i].digital.i, reel.framerate), reel.C);
-					digitalOut = correct(pulldown(film.cuts[i].digital.o, reel.framerate), reel.C);
+					digitalIn = WP.correct(WP.pulldown(film.cuts[i].digital.i, reel.framerate), reel.C);
+					digitalOut = WP.correct(WP.pulldown(film.cuts[i].digital.o, reel.framerate), reel.C);
 				film.cuts[i].frames = {
 					"i" : digitalIn,
 					"o" : digitalOut
 				};
-				film.cuts[i].keycode.i = keyBase + toKey(frameBase + digitalIn);
-				film.cuts[i].keycode.o = keyBase + toKey(frameBase + digitalOut);
+				film.cuts[i].keycode.i = keyBase + WP.toKey(frameBase + digitalIn);
+				film.cuts[i].keycode.o = keyBase + WP.toKey(frameBase + digitalOut);
 				film.cuts[i].deviate = Math.round(reel.C * (digitalOut - digitalIn));
-				film.cuts[i].feet.i = toFeet(digitalIn);
-				film.cuts[i].feet.o = toFeet(digitalOut);
+				film.cuts[i].feet.i = WP.toFeet(digitalIn);
+				film.cuts[i].feet.o = WP.toFeet(digitalOut);
 				film.cuts[i].framerate = reel.framerate;
 				film.cuts[i].C = reel.C;
 			}
@@ -349,16 +350,17 @@ var film = {},
 			WP.displayCutlist();
 		}
 	},
+	// Renders cutlist
 	displayCutlist : function () {
 		'use strict';
 		WP.correctBlack();
 		$('#keycodeEntry').fadeOut(482);
 		$('#cutlist table tbody').empty();
-		film.cuts = reIndex(film.cuts);
+		film.cuts = WP.reIndex(film.cuts);
 		for(var i in film.cuts){
 			if(film.cuts[i].reel !== '*BLACK*') {
-				film.cuts[i].keycode.i = normalArray(film.cuts[i].keycode.i);
-				film.cuts[i].keycode.o = normalArray(film.cuts[i].keycode.o);
+				film.cuts[i].keycode.i = WP.normalArray(film.cuts[i].keycode.i);
+				film.cuts[i].keycode.o = WP.normalArray(film.cuts[i].keycode.o);
 			}
 		}
 		$('#cutDisplay').tmpl(film.cuts).appendTo('#cutlist table tbody');
@@ -367,219 +369,206 @@ var film = {},
 		$('#reelDisplay').tmpl(film.reels).appendTo('#reels table tbody');
 		$('#reels').fadeIn(530);
 		return false;
-	}
-}
-
-//@param: reel - object derived from xml
-//@returns: object with corrections applied
-var compare = function (reel) {
-	'use strict';
-	reel.deviate = reel.frames - pulldown(reel.digital, reel.framerate);
-	reel.C = reel.deviate / reel.frames;
-	return reel;
-}
-
-//@param: frames - integer
-//@param: C - float (correction value)
-//@returns: integer
-var correct = function (frames, C) {
-	return Math.round(frames + (frames * C));
-}
-
-//@param: d - integer
-//@param: framerate - float
-//@returns: integer
-var pulldown = function (d, framerate) {
-	'use strict';
-	return Math.floor((d/framerate) * 24);
-}
-
-//gives a reneral estimate of the length of the roll, probably good within 3-5 frames for 100' rolls
-//@param: frames - integer
-//@param: framerate - float
-//@returns: formatted String (0+00')
-var toRough = function (frames, framerate) {
-	'use strict';
-	var n = Math.floor((frames/framerate) * 24);
-	return toFeet(n);
-}
-
-//toTimecode all that is needed for now
-//@param: frames - integer
-//@param: rate - float
-//@returns: formatted String (00:00;00)
-var toTimecode = function (frames, rate) {
-	'use strict';
-	var str = '';
-	if (rate === 29.97) {
-		rate = 30;
-	}
-	var first = Math.floor(frames/rate);
-	if(first > 60) {
-		var second = Math.floor(first/60);
-		str += zeroPad(second, 2) + ':' + zeroPad(first % 60, 2);
-	}else{
-		str += '00:'+zeroPad(first, 2);
-	}
-	str += ';' + zeroPad(frames % rate, 2);
-	return str;
-}
-
-//All feet measurements must be marked with trailing '
-//can be unpadded with preceding 0
-//@param: footage - formated String (0+00')
-//@returns: frames - integer
-var fromFeet = function (footage) {
-	'use strict';
-    var pieces = footage.split('+'),
-        feet = parseInt(pieces[0], 10),
-        frames = parseInt(pieces[1].substring(0, 2), 10);
-    return Math.round((feet * 40) + frames);
-};
-
-//Convert frame count to footage notation 0+00'
-//@param: frames - integer
-//@param: start - formated String (optional)
-//@returns: formatted String (0+00')
-var toFeet = function (frames, start) {
-	'use strict';
-	if (start !== null && start !== undefined && start !== "0+00'") {
-		frames += fromFeet(start);
-	}
-    var feet = Math.floor(frames / 40);
-    frames = frames % 40;
-    return feet + '+' + zeroPad(frames, 2) + "'";
-};
-
-//to integer from 7 character format
-//@param: frames - integer
-//@param: start - formated String (0000+00)
-//@returns: formated String (0000+00)
-var toKey = function (frames, start) {
-	'use strict';
-	if (start !== null && start !== undefined && start !== '0000+00') {
-		frames += fromKey(start);
-	}
-    var first = Math.floor(frames / 20),
-        second = frames % 20;
-    return zeroPad(first, 4) + '+' + zeroPad(second, 2);
-};
-
-//Always represented in padded values
-//@param: key - formatted String (0000+00)
-//@returns: integer
-var fromKey = function (key) {
-	'use strict';
-    var first = parseInt(key.substring(0, 4), 10),
-        second = parseInt(key.substring(5, 7), 10);
-    return Math.round((first * 20) + second);
-};
-
-//normalize keycode values
-//'XXXX00000000+00'
-//@param: j - unformatted String
-//@returns: formated String (XXXX00000000+00)
-var normal = function (j) {
-	'use strict';
-	if (j === null) {return null}
-    if (j.length === 17) {
-        return j.substring(0, 4) + j.substring(5, 9) + j.substring(10, 17);
-    } else if (j.length === 16) {
-        var e = explode(" ", j);
-        return e[0] + '' + e[1];
-    } else if (j.length === 15) {
-        return j;
-    }
-};
-
-//returns array ["XXXX","0000","0000+00"]
-//@param: key - formatted/unformatted String
-//@returns: Array
-var normalArray = function (key) {
-	'use strict';
-    key = normal(key);
-    var rtnArr = [];
-    rtnArr[0] = key.substring(0, 4);
-    rtnArr[1] = key.substring(4, 8);
-    rtnArr[2] = key.substring(8, 15);
-    return rtnArr;
-};
-
-//display keycode as XXXX 0000 0000+00
-//@param: val - formatted/unformatted String (XXXX00000000+00) || Array[3]
-//@returns: formatted String (XXXX 0000 0000+00)
-var normalDisplay = function (val) {
-	'use strict';
-	if (typeof val === 'object') {
-		return val[0] + ' ' + val[1] + ' ' + val[2];
-	} else if (typeof val === 'string') {
-		if (val.length !== 15) {
-			val = normal(val);
+	},
+	//normalize keycode values
+	//'XXXX00000000+00'
+	//@param: j - unformatted String
+	//@returns: formated String (XXXX00000000+00)
+	normal : function (j) {
+		'use strict';
+		if (j === null) {return null}
+	    if (j.length === 17) {
+	        return j.substring(0, 4) + j.substring(5, 9) + j.substring(10, 17);
+	    } else if (j.length === 16) {
+	        var e = explode(" ", j);
+	        return e[0] + '' + e[1];
+	    } else if (j.length === 15) {
+	        return j;
+	    }
+	},
+	//returns array ["XXXX","0000","0000+00"]
+	//@param: key - formatted/unformatted String
+	//@returns: Array
+	normalArray : function (key) {
+		'use strict';
+	    key = WP.normal(key);
+	    var rtnArr = [];
+	    rtnArr[0] = key.substring(0, 4);
+	    rtnArr[1] = key.substring(4, 8);
+	    rtnArr[2] = key.substring(8, 15);
+	    return rtnArr;
+	},
+	//display keycode as XXXX 0000 0000+00
+	//@param: val - formatted/unformatted String (XXXX00000000+00) || Array[3]
+	//@returns: formatted String (XXXX 0000 0000+00)
+	normalDisplay : function (val) {
+		'use strict';
+		if (typeof val === 'object') {
+			return val[0] + ' ' + val[1] + ' ' + val[2];
+		} else if (typeof val === 'string') {
+			if (val.length !== 15) {
+				val = WP.normal(val);
+			}
+			return val.substring(0, 4) + ' ' + val.substring(4, 8) + ' ' + val.substring(8, 15);
 		}
-		return val.substring(0, 4) + ' ' + val.substring(4, 8) + ' ' + val.substring(8, 15);
+	},
+	//@param: reel - object derived from xml
+	//@returns: object with corrections applied
+	compare : function (reel) {
+		'use strict';
+		reel.deviate = reel.frames - WP.pulldown(reel.digital, reel.framerate);
+		reel.C = reel.deviate / reel.frames;
+		return reel;
+	},
+	//@param: frames - integer
+	//@param: C - float (correction value)
+	//@returns: integer
+	correct : function (frames, C) {
+		return Math.round(frames + (frames * C));
+	},
+	//@param: d - integer
+	//@param: framerate - float
+	//@returns: integer
+	pulldown : function (d, framerate) {
+		'use strict';
+		return Math.floor((d/framerate) * 24);
+	},
+	//gives a reneral estimate of the length of the roll, probably good within 3-5 frames for 100' rolls
+	//@param: frames - integer
+	//@param: framerate - float
+	//@returns: formatted String (0+00')
+	toRough : function (frames, framerate) {
+		'use strict';
+		var n = Math.floor((frames/framerate) * 24);
+		return WP.toFeet(n);
+	},
+	//toTimecode all that is needed for now
+	//@param: frames - integer
+	//@param: rate - float
+	//@returns: formatted String (00:00;00)
+	toTimecode : function (frames, rate) {
+		'use strict';
+		var str = '';
+		if (rate === 29.97) {
+			rate = 30;
+		}
+		var first = Math.floor(frames/rate);
+		if(first > 60) {
+			var second = Math.floor(first/60);
+			str += WP.zeroPad(second, 2) + ':' + WP.zeroPad(first % 60, 2);
+		}else{
+			str += '00:'+WP.zeroPad(first, 2);
+		}
+		str += ';' + WP.zeroPad(frames % rate, 2);
+		return str;
+	},
+	//All feet measurements must be marked with trailing '
+	//can be unpadded with preceding 0
+	//@param: footage - formated String (0+00')
+	//@returns: frames - integer
+	fromFeet : function (footage) {
+		'use strict';
+	    var pieces = footage.split('+'),
+	        feet = parseInt(pieces[0], 10),
+	        frames = parseInt(pieces[1].substring(0, 2), 10);
+	    return Math.round((feet * 40) + frames);
+	},
+	//Convert frame count to footage notation 0+00'
+	//@param: frames - integer
+	//@param: start - formated String (optional)
+	//@returns: formatted String (0+00')
+	toFeet : function (frames, start) {
+		'use strict';
+		if (start !== null && start !== undefined && start !== "0+00'") {
+			frames += WP.fromFeet(start);
+		}
+	    var feet = Math.floor(frames / 40);
+	    frames = frames % 40;
+	    return feet + '+' + WP.zeroPad(frames, 2) + "'";
+	},
+	//to integer from 7 character format
+	//@param: frames - integer
+	//@param: start - formated String (0000+00)
+	//@returns: formated String (0000+00)
+	toKey : function (frames, start) {
+		'use strict';
+		if (start !== null && start !== undefined && start !== '0000+00') {
+			frames += WP.fromKey(start);
+		}
+	    var first = Math.floor(frames / 20),
+	        second = frames % 20;
+	    return WP.zeroPad(first, 4) + '+' + WP.zeroPad(second, 2);
+	},
+	//Always represented in padded values
+	//@param: key - formatted String (0000+00)
+	//@returns: integer
+	fromKey : function (key) {
+		'use strict';
+	    var first = parseInt(key.substring(0, 4), 10),
+	        second = parseInt(key.substring(5, 7), 10);
+	    return Math.round((first * 20) + second);
+	},
+	//
+	//@param: arr - Array with object containing index
+	//@returns: new Array of objects with corrected index 
+	reIndex : function (arr) {
+		for (var i in arr) {
+			arr[i].index  = i;
+		}
+		return arr;
+	},
+	//Lower level functions
+	//Adds leading zeros of any length
+	//@param: num - integer
+	//@param: places - integer
+	//@returns: formatted String (0000 for places=4) 
+	zeroPad : function (num, places) {
+		'use strict';
+	    var zero = places - num.toString().length + 1;
+	    return Array(+(zero > 0 && zero)).join("0") + num + '';
+	},
+	//To differentiate feet formatted Strings from keycode strings
+	//(hopefully never needed)
+	//@param: str - formatted String
+	//@returns: boolean
+	isFeet : function (str) {
+		'use strict';
+		if (str.charAt(str.length - 1) === "'") { return true; }
+		return false;
+	},
+	//@param: obj - object or Array
+	//@returns: boolean
+	isArray : function (obj) {
+	    return obj.constructor == Array;
+	},
+	//Used to sort cuts from multi-track sequences
+	//@param: a - cut object
+	//@param: b - cut object
+	//@returns: sort value
+	sortTracks : function (a, b) {
+		if (parseInt(a.start) < parseInt(b.start)) {
+			return -1;
+		}
+		if (parseInt(a.start) > parseInt(b.start)) {
+			return 1;
+		}
+		return 0;
+	},
+	sortCuts : function (a, b) {
+		if (a['location']['start'] < b['location']['start']) {
+			return -1;
+		}
+		if (a['location']['start'] > b['location']['start']) {
+			return 1;
+		}
+		return 0;
 	}
-};
 
-//
-//@param: arr - Array with object containing index
-//@returns: new Array of objects with corrected index 
-var reIndex = function (arr) {
-	for (var i in arr) {
-		arr[i].index  = i;
-	}
-	return arr;
 }
 
-//Lower level functions
-//Adds leading zeros of any length
-//@param: num - integer
-//@param: places - integer
-//@returns: formatted String (0000 for places=4) 
-var zeroPad = function (num, places) {
-	'use strict';
-    var zero = places - num.toString().length + 1;
-    return Array(+(zero > 0 && zero)).join("0") + num + '';
-};
 
-//To differentiate feet formatted Strings from keycode strings
-//(hopefully never needed)
-//@param: str - formatted String
-//@returns: boolean
-var isFeet = function (str) {
-	'use strict';
-	if (str.charAt(str.length - 1) === "'") { return true; }
-	return false;
-};
 
-//@param: obj - object or Array
-//@returns: boolean
-var isArray = function (obj) {
-    return obj.constructor == Array;
-}
 
-//Used to sort cuts from multi-track sequences
-//@param: a - cut object
-//@param: b - cut object
-//@returns: sort value
-var sortTracks = function (a, b) {
-	if (parseInt(a.start) < parseInt(b.start)) {
-		return -1;
-	}
-	if (parseInt(a.start) > parseInt(b.start)) {
-		return 1;
-	}
-	return 0;
-}
-
-var sortCuts = function (a, b) {
-	if (a['location']['start'] < b['location']['start']) {
-		return -1;
-	}
-	if (a['location']['start'] > b['location']['start']) {
-		return 1;
-	}
-	return 0;
-}
 
 /*
 OBJECT STRUCTURE
