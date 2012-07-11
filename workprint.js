@@ -357,6 +357,8 @@ var film = {},
 		$('#keycodeEntry').fadeOut(482);
 		$('#cutlist table tbody').empty();
 		film.cuts = this.reIndex(film.cuts);
+		console.log('FILM OBJECT:');
+		console.dir(film);
 		for(var i in film.cuts){
 			if(film.cuts[i].reel !== '*BLACK*') {
 				film.cuts[i].keycode.i = this.normalArray(film.cuts[i].keycode.i);
@@ -565,10 +567,6 @@ var film = {},
 	}
 
 }
-
-
-
-
 
 /*
 OBJECT STRUCTURE
