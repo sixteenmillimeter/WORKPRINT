@@ -1170,22 +1170,22 @@
 						<uuid>F76DF40B-9C11-433D-A2CF-F5DC1141A892</uuid>
 					</itemhistory>
 				</clipitem>
-				<clipitem id="Roll BW 1 - Logged">
-					<name>Roll BW 1 - Logged</name>
-					<duration>4587</duration>
+				<clipitem id="Roll BW 1 ">
+					<name>Roll BW 1</name>
+					<duration>5196</duration>
 					<rate>
 						<ntsc>TRUE</ntsc>
 						<timebase>30</timebase>
 					</rate>
-					<in>1202</in>
-					<out>2413</out>
+					<in>1811</in>
+					<out>3002</out>
 					<start>9762</start>
-					<end>10973</end>
+					<end>10953</end>
 					<pixelaspectratio>NTSC-601</pixelaspectratio>
 					<enabled>TRUE</enabled>
 					<anamorphic>FALSE</anamorphic>
 					<alphatype>none</alphatype>
-					<masterclipid>Roll BW 1 - Logged1</masterclipid>
+					<masterclipid>Roll BW 1 1</masterclipid>
 					<logginginfo>
 						<scene/>
 						<shottake/>
@@ -1201,17 +1201,17 @@
 						<mastercomment3/>
 						<mastercomment4/>
 					</comments>
-					<file id="Roll BW 1 - Logged2">
-						<name>Roll BW 1 - Logged.mov</name>
-						<pathurl>file://localhost/Volumes/PROXY1/Roll%20BW%201%20-%20Logged.mov</pathurl>
+					<file id="Roll BW 1 2">
+						<name>Roll BW 1.mov</name>
+						<pathurl>file://localhost/Volumes/PROXY1/Roll%20BW%201.mov</pathurl>
 						<rate>
 							<timebase>30</timebase>
 							<ntsc>TRUE</ntsc>
 						</rate>
-						<duration>4587</duration>
+						<duration>5196</duration>
 						<media>
 							<video>
-								<duration>4587</duration>
+								<duration>5196</duration>
 								<samplecharacteristics>
 									<width>720</width>
 									<height>486</height>
@@ -1260,21 +1260,21 @@
 								<name>Highlights</name>
 								<valuemin>64</valuemin>
 								<valuemax>509</valuemax>
-								<value>277</value>
+								<value>262</value>
 							</parameter>
 							<parameter>
 								<parameterid>mids</parameterid>
 								<name>Mids</name>
 								<valuemin>0</valuemin>
 								<valuemax>200</valuemax>
-								<value>143</value>
+								<value>124</value>
 							</parameter>
 							<parameter>
 								<parameterid>blacklevel</parameterid>
 								<name>Blacks</name>
 								<valuemin>-196</valuemin>
 								<valuemax>254</valuemax>
-								<value>0</value>
+								<value>5</value>
 							</parameter>
 							<parameter>
 								<parameterid>label2</parameterid>
@@ -1436,9 +1436,9 @@
 					<sourcetrack>
 						<mediatype>video</mediatype>
 					</sourcetrack>
-					<fielddominance>lower</fielddominance>
+					<fielddominance>none</fielddominance>
 					<itemhistory>
-						<uuid>60A76BE5-8110-45FA-AC50-B9263DACB0F0</uuid>
+						<uuid>B997BB84-5C36-4492-B758-B3D73BA5C346</uuid>
 					</itemhistory>
 				</clipitem>
 				<clipitem id="Roll 8 - Logged-Pro-res Proxy - Silent">
@@ -2652,7 +2652,7 @@
 						<uuid>6DBD4BE0-BEE4-47D8-A04E-81FA6E285B9A</uuid>
 					</itemhistory>
 				</clipitem>
-				<clipitem id="Roll BW 1 ">
+				<clipitem id="Roll BW 1 3">
 					<name>Roll BW 1</name>
 					<duration>5196</duration>
 					<rate>
@@ -2682,24 +2682,7 @@
 						<mastercomment3/>
 						<mastercomment4/>
 					</comments>
-					<file id="Roll BW 1 2">
-						<name>Roll BW 1.mov</name>
-						<pathurl>file://localhost/Volumes/PROXY1/Roll%20BW%201.mov</pathurl>
-						<rate>
-							<timebase>30</timebase>
-							<ntsc>TRUE</ntsc>
-						</rate>
-						<duration>5196</duration>
-						<media>
-							<video>
-								<duration>5196</duration>
-								<samplecharacteristics>
-									<width>720</width>
-									<height>486</height>
-								</samplecharacteristics>
-							</video>
-						</media>
-					</file>
+					<file id="Roll BW 1 2"/>
 					<sourcetrack>
 						<mediatype>video</mediatype>
 					</sourcetrack>
@@ -2748,7 +2731,7 @@
 						<uuid>7A5989A9-8148-49A1-B946-D9ED44640890</uuid>
 					</itemhistory>
 				</clipitem>
-				<clipitem id="Roll BW 1 3">
+				<clipitem id="Roll BW 1 4">
 					<name>Roll BW 1</name>
 					<duration>5196</duration>
 					<rate>
