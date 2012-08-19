@@ -7,7 +7,7 @@
 	LE16 - Linear Editor for 16mm                                                       
 */
 
-$('#upload').click(function () {
+$('#upload').bind('click', function () {
     'use strict';
     $('#landing').fadeOut('560');
     $('#uploadFile').delay('560').fadeIn('560');
@@ -58,6 +58,7 @@ var film = {},
 					cuts = obj.sequence.media.video.track.clipitem;
 				}
 				//populate film data
+				film.deanLearner = new brain.NeuralNetwork();
 				film.type = "film";
 				film.name = obj.sequence.name;
 				film.id = uuid();
@@ -126,17 +127,12 @@ var film = {},
 		//console.dir(film);
 		$('#uploadFile').fadeOut('560');
 		$('#keycodeEntry').delay('560').fadeIn('600');
-		var storeCheck = $.jStorage.get('reels'),
-			reelStore;
-		if (storeCheck !== null && storeCheck !== undefined && storeCheck !== "[]") {
-			reelStore = JSON.parse(storeCheck);
-			for (var i in film.reels) {
-				var keyName = film.reels[i].name,
-				keyLength = film.reels[i].digital;
-				if (reelStore[keyName] !== undefined && reelStore[keyName] !== null) {
-					if (reelStore[keyName].duration == keyLength) {
-						film.reels[i] = reelStore[keyName];
-					}
+		var storeIndex = $.jStorage.index();
+		for (var i in storeIndex) {
+			for (var x in film.reels) {
+				if (storeIndex[i] == film.reels[x].digital + film.reels[x].name) {
+					var r = JSON.parse($.jStorage.get(film.reels[x].digital + film.reels[x].name));
+					film.reels[x] = r;
 				}
 			}
 		}
@@ -145,14 +141,15 @@ var film = {},
 		$('#keycodeInput').tmpl(film.reels).appendTo('#keycodeEntry');
 		for (var i in film.reels) {
 			if (film.reels[i].keycode.i !== null && film.reels[i].keycode.o !== null) {
-				updateCuts[film.reels[i]];
+				WP.updateCuts[film.reels[i]];
+				WP.saveKeycode($('#inputID-' + film.reels[i].id).find('.keycodeSave').eq(0));
 			}
 		}
 		//events
-		$('.keycodeSave').click(function () {
+		$('.keycodeSave').live('click', function () {
 	    	WP.saveKeycode($(this));
 	  	});
-	  	$('.keycodeInput input').change(function () {
+	  	$('.keycodeInput input').live('change', function () {
 	  		if ($(this).val().length > 14) {
 	  			$(this).addClass('filled');
 	  			if ($(this).parent().parent().find('.i').hasClass('filled') && $(this).parent().parent().find('.o').hasClass('filled')) {
@@ -162,7 +159,25 @@ var film = {},
 	  			}
 	  			
 	  		}
-
+	  	});
+	  	$('.keycodeInput .btn-warning').live('click', function () {
+	  		$(this).parent().find('input.i').val('');
+	  		$(this).parent().find('input.o').val('');
+	  		var $disp = $(this).parent()
+	  		if ($disp.attr('data') !== undefined && $disp.attr('data') !== null && $disp.attr('data') !== '') {
+	  			var reel = JSON.parse($.jStorage.get($disp.attr('data')));
+				$disp.removeClass('savedKeycode');
+				$disp.find('input.i').show();
+				$disp.find('input.i').val('');
+				$disp.find('.enteredText.i').text('')
+				$disp.find('.enteredText.i').hide();
+				$disp.find('input.o').show();
+				$disp.find('.enteredText.o').text('');
+				$disp.find('.enteredText.o').hide()
+				$disp.find('.footageEst').text(reel.rough);
+				$disp.find('.keycodeSave').removeClass('disabled');
+				$.jStorage.deleteKey($disp.attr('data'));
+	  		}
 	  	});
 		return false;
 	},
@@ -171,21 +186,25 @@ var film = {},
 	saveKeycode : function ($elem) {
 		'use strict';
 		var container = $elem.parent(),
-			id = container.attr('id'),
-			realId = id.split('inputID-');
+			id = container.attr('id');
+			var realId = id.split('inputID-');
 		for (var i in film.reels) {
 			if (film.reels[i].id === realId[1]) {
 				var inVal = this.normalDisplay(this.normal(container.find('.i').val())),
 					outVal = this.normalDisplay(this.normal(container.find('.o').val()));
-				film.reels[i].keycode.i = inVal;
-				film.reels[i].keycode.o = outVal;
-				var inSplit = inVal.split(' '),
-					outSplit = outVal.split(' ');
-				film.reels[i].frames = this.fromKey(outSplit[2]) - this.fromKey(inSplit[2]);
-				film.reels[i].footage = this.toFeet(film.reels[i].frames);
-				film.reels[i].realtime = film.reels[i].frames * (1 / 24);
-				film.reels[i] = this.compare(film.reels[i]);
-				//this.storeReel(film.reels[i]);
+				if (inVal !== undefined) {
+					film.reels[i].keycode.i = inVal;
+					film.reels[i].keycode.o = outVal;
+					var inSplit = inVal.split(' '),
+						outSplit = outVal.split(' ');
+					film.reels[i].frames = this.fromKey(outSplit[2]) - this.fromKey(inSplit[2]);
+					film.reels[i].footage = this.toFeet(film.reels[i].frames);
+					film.reels[i].realtime = film.reels[i].frames * (1 / 24);
+					film.reels[i] = this.compare(film.reels[i]);
+					this.storeReel(film.reels[i]);
+				}else{
+					$('#inputID-' + film.reels[i].id).attr('data', film.reels[i].digital + film.reels[i].name);
+				}
 				this.updateCuts(film.reels[i]);
 				break;
 			}
@@ -291,17 +310,14 @@ var film = {},
 	//@returns: jStorage key "reels"
 	storeReel : function (reel) {
 		'use strict';
-		var storeCheck = $.jStorage.get("reels"),
-			reelStore = {};
-		console.dir(storeCheck);
-		reelStore = JSON.parse(storeCheck);
-		if(reelStore === null){
-			reelStore = {0:[]};
+		//console.dir(reel);
+		var index = $.jStorage.index();
+		if ($.inArray(reel.digital + reel.name, index) === -1) {
+			$.jStorage.set(reel.digital + reel.name, JSON.stringify(reel));
+		} else if ($.inArray(reel.digital + reel.name, index) === 0) {
+
 		}
-		reelStore[0][reel.name] = reel;
-		console.dir(reelStore);
-		var reelString = JSON.stringify(reelStore);
-		$.jStorage.set("reels",reelString);
+		
 		return false;
 	},
 	//Traverses film.cuts Array and updates the ones that name match the reel
@@ -312,9 +328,11 @@ var film = {},
 		var $disp = $('#inputID-' + reel.id);
 		$disp.addClass('savedKeycode');
 		$disp.find('input.i').hide();
-		$disp.find('.enteredText.i').text(reel.keycode.i).show();
+		$disp.find('.enteredText.i').text(reel.keycode.i)
+		$disp.find('.enteredText.i').show();
 		$disp.find('input.o').hide();
-		$disp.find('.enteredText.o').text(reel.keycode.o).show();
+		$disp.find('.enteredText.o').text(reel.keycode.o);
+		$disp.find('.enteredText.o').show()
 		$disp.find('.footageEst').text(reel.footage);
 		$disp.find('.keycodeSave').addClass('disabled');
 		//change cuts
@@ -325,8 +343,16 @@ var film = {},
 					frameBase = this.fromKey(keyI[2]),
 					digitalIn = 0, 
 					digitalOut = 0;
+
 					digitalIn = this.correct(this.pulldown(film.cuts[i].digital.i, reel.framerate), reel.C);
+					//NOTHING TO SEE HERE MOVE ALONG
+					WP.editLearn(film.cuts[i].digital.i, reel.framerate, reel.C, digitalIn);
+					//DONE WITH THE DONT WORRY ABOUT IT THING
+
 					digitalOut = this.correct(this.pulldown(film.cuts[i].digital.o, reel.framerate), reel.C);
+					//NOTHING TO SEE HERE MOVE ALONG
+					WP.editLearn(film.cuts[i].digital.o, reel.framerate, reel.C, digitalOut);
+					//DONE WITH THE DONT WORRY ABOUT IT THING
 				film.cuts[i].frames = {
 					"i" : digitalIn,
 					"o" : digitalOut
@@ -350,6 +376,20 @@ var film = {},
 			this.displayCutlist();
 		}
 	},
+	//teaches NN when film
+	editLearn : function (d, f, C, newNew) {
+		film.deanLearner.train([{
+			input: {
+				digital: d,
+				framerate: f,
+				digitalPulldown: this.pulldown(d, f),
+				C: C            
+		    },
+		    output: {
+		        film: newNew
+		    }}]);
+	},
+
 	// Renders cutlist
 	displayCutlist : function () {
 		'use strict';
