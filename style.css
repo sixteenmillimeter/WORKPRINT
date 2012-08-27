@@ -5,7 +5,8 @@
 #reels,
 #cutlist,
 #keycodeEntry,
-.enteredText{
+.enteredText,
+#WPcalc{
   display:none;
   }
 

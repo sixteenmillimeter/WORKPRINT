@@ -37,6 +37,7 @@ $('#uploadFile').ajaxForm({
 });
 
 var film = {},
+	//Workprint basic funtionality.
 	WP = {
 		build : function (obj) {
 			'use strict';
@@ -581,6 +582,7 @@ var film = {},
 	//@param: obj - object or Array
 	//@returns: boolean
 	isArray : function (obj) {
+		'use strict';
 	    return obj.constructor == Array;
 	},
 	//Used to sort cuts from multi-track sequences
@@ -588,6 +590,7 @@ var film = {},
 	//@param: b - cut object
 	//@returns: sort value
 	sortTracks : function (a, b) {
+		'use strict';
 		if (parseInt(a.start) < parseInt(b.start)) {
 			return -1;
 		}
@@ -597,6 +600,7 @@ var film = {},
 		return 0;
 	},
 	sortCuts : function (a, b) {
+		'use strict';
 		if (a['location']['start'] < b['location']['start']) {
 			return -1;
 		}
@@ -605,6 +609,21 @@ var film = {},
 		}
 		return 0;
 	}
+},
+//Calculator for mobile
+WPcalc = {
+	_ui : function () {
+		'use strict';
+		$('#WPcalc input').bind('change', function () {
+			var id = $(this)).attr('id'),
+				val = $(this).val();
+			if (id === '') {
+
+			} else if (id === '0') {
+
+			}
+		});
+	},
 
 }
 
@@ -707,9 +726,6 @@ var partA=splitted.splice(0,limit-1);var partB=splitted.join(delimiter.toString(
 
 //uuid generator
 var uuid = function () {var S4=function(){return((1+Math.random())*65536|0).toString(16).substring(1)};return S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4()};
-
-//xml2json
-;if(window.jQuery)(function($){$.extend({xml2json:function(xml,extended){if(!xml)return{};function parseXML(node,simple){if(!node)return null;var txt='',obj=null,att=null;var nt=node.nodeType,nn=jsVar(node.localName||node.nodeName);var nv=node.text||node.nodeValue||'';if(node.childNodes){if(node.childNodes.length>0){$.each(node.childNodes,function(n,cn){var cnt=cn.nodeType,cnn=jsVar(cn.localName||cn.nodeName);var cnv=cn.text||cn.nodeValue||'';if(cnt==8){return}else if(cnt==3||cnt==4||!cnn){if(cnv.match(/^\s+$/)){return};txt+=cnv.replace(/^\s+/,'').replace(/\s+$/,'')}else{obj=obj||{};if(obj[cnn]){if(!obj[cnn].length)obj[cnn]=myArr(obj[cnn]);obj[cnn]=myArr(obj[cnn]);obj[cnn][obj[cnn].length]=parseXML(cn,true);obj[cnn].length=obj[cnn].length}else{obj[cnn]=parseXML(cn)}}})}};if(node.attributes){if(node.attributes.length>0){att={};obj=obj||{};$.each(node.attributes,function(a,at){var atn=jsVar(at.name),atv=at.value;att[atn]=atv;if(obj[atn]){obj[cnn]=myArr(obj[cnn]);obj[atn][obj[atn].length]=atv;obj[atn].length=obj[atn].length}else{obj[atn]=atv}})}};if(obj){obj=$.extend((txt!=''?new String(txt):{}),obj||{});txt=(obj.text)?(typeof(obj.text)=='object'?obj.text:[obj.text||'']).concat([txt]):txt;if(txt)obj.text=txt;txt=''};var out=obj||txt;if(extended){if(txt)out={};txt=out.text||txt||'';if(txt)out.text=txt;if(!simple)out=myArr(out)};return out};var jsVar=function(s){return String(s||'').replace(/-/g,"_")};function isNum(s){var regexp=/^((-)?([0-9]+)(([\.\,]{0,1})([0-9]+))?$)/return(typeof s=="number")||regexp.test(String((s&&typeof s=="string")?jQuery.trim(s):''))};var myArr=function(o){if(!$.isArray(o))o=[o];o.length=o.length;return o};if(typeof xml=='string')xml=$.text2xml(xml);if(!xml.nodeType)return;if(xml.nodeType==3||xml.nodeType==4)return xml.nodeValue;var root=(xml.nodeType==9)?xml.documentElement:xml;var out=parseXML(root,true);xml=null;root=null;return out},text2xml:function(str){var out;try{var xml=($.browser.msie)?new ActiveXObject("Microsoft.XMLDOM"):new DOMParser();xml.async=false}catch(e){throw new Error("XML Parser could not be instantiated")};try{if($.browser.msie)out=(xml.loadXML(str))?xml:false;else out=xml.parseFromString(str,"text/xml")}catch(e){throw new Error("Error parsing XML string")};return out}})})(jQuery);
 
 //jstorage
 (function(g){function m(){if(e.jStorage)try{d=n(""+e.jStorage)}catch(a){e.jStorage="{}"}else e.jStorage="{}";j=e.jStorage?(""+e.jStorage).length:0}function h(){try{e.jStorage=o(d),c&&(c.setAttribute("jStorage",e.jStorage),c.save("jStorage")),j=e.jStorage?(""+e.jStorage).length:0}catch(a){}}function i(a){if(!a||"string"!=typeof a&&"number"!=typeof a)throw new TypeError("Key name must be string or numeric");if("__jstorage_meta"==a)throw new TypeError("Reserved key name");return!0}function k(){var a,
