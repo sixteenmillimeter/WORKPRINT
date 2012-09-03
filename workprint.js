@@ -339,7 +339,8 @@ var film = {},
 		//change cuts
 		for (var i in film.cuts) {
 			if (film.cuts[i].reel === reel.name) {
-				var keyI = reel.keycode.i.split(" "),
+				if (reel.keycode.i !== null && reel.keycode.i !== undefined) {
+					var keyI = reel.keycode.i.split(" "),
 					keyBase = keyI[0] + ' ' + keyI[1] + ' ',
 					frameBase = this.fromKey(keyI[2]),
 					digitalIn = 0, 
@@ -347,24 +348,26 @@ var film = {},
 
 					digitalIn = this.correct(this.pulldown(film.cuts[i].digital.i, reel.framerate), reel.C);
 					//NOTHING TO SEE HERE MOVE ALONG
-					WP.editLearn(film.cuts[i].digital.i, reel.framerate, reel.C, digitalIn);
+					//WP.editLearn(film.cuts[i].digital.i, reel.framerate, reel.C, digitalIn);
 					//DONE WITH THE DONT WORRY ABOUT IT THING
 
 					digitalOut = this.correct(this.pulldown(film.cuts[i].digital.o, reel.framerate), reel.C);
 					//NOTHING TO SEE HERE MOVE ALONG
-					WP.editLearn(film.cuts[i].digital.o, reel.framerate, reel.C, digitalOut);
+					//WP.editLearn(film.cuts[i].digital.o, reel.framerate, reel.C, digitalOut);
 					//DONE WITH THE DONT WORRY ABOUT IT THING
-				film.cuts[i].frames = {
-					"i" : digitalIn,
-					"o" : digitalOut
-				};
-				film.cuts[i].keycode.i = keyBase + this.toKey(frameBase + digitalIn);
-				film.cuts[i].keycode.o = keyBase + this.toKey(frameBase + digitalOut);
-				film.cuts[i].deviate = Math.round(reel.C * (digitalOut - digitalIn));
-				film.cuts[i].feet.i = this.toFeet(digitalIn);
-				film.cuts[i].feet.o = this.toFeet(digitalOut);
-				film.cuts[i].framerate = reel.framerate;
-				film.cuts[i].C = reel.C;
+					film.cuts[i].frames = {
+						"i" : digitalIn,
+						"o" : digitalOut
+					};
+					film.cuts[i].keycode.i = keyBase + this.toKey(frameBase + digitalIn);
+					film.cuts[i].keycode.o = keyBase + this.toKey(frameBase + digitalOut);
+					film.cuts[i].deviate = Math.round(reel.C * (digitalOut - digitalIn));
+					film.cuts[i].feet.i = this.toFeet(digitalIn);
+					film.cuts[i].feet.o = this.toFeet(digitalOut);
+					film.cuts[i].framerate = reel.framerate;
+					film.cuts[i].C = reel.C;
+				}
+				
 			}
 		}
 		var allSaved = true;
@@ -434,6 +437,7 @@ var film = {},
 	//@returns: Array
 	normalArray : function (key) {
 		'use strict';
+		if (key === null) {return ['','','']}
 	    key = this.normal(key);
 	    var rtnArr = [];
 	    rtnArr[0] = key.substring(0, 4);
@@ -615,7 +619,7 @@ WPcalc = {
 	_ui : function () {
 		'use strict';
 		$('#WPcalc input').bind('change', function () {
-			var id = $(this)).attr('id'),
+			var id = $(this).attr('id'),
 				val = $(this).val();
 			if (id === '') {
 
