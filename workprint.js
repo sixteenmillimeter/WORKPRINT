@@ -193,7 +193,7 @@ var film = {},
 			if (film.reels[i].id === realId[1]) {
 				var inVal = this.normalDisplay(this.normal(container.find('.i').val())),
 					outVal = this.normalDisplay(this.normal(container.find('.o').val()));
-				if (inVal !== undefined) {
+				if (inVal !== undefined && inVal !== null) {
 					film.reels[i].keycode.i = inVal;
 					film.reels[i].keycode.o = outVal;
 					var inSplit = inVal.split(' '),
