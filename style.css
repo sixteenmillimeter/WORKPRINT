@@ -13,3 +13,14 @@
   span.little-alert{
   	padding: 5px 8px 5px 8px;
   }
+
+  #WPcalc input{
+  	border:1px solid #999;
+  	width:90%;
+  	margin-left:5%;
+  	height:65px;
+  	font-size:30px;
+  }
+  #WPcalc input#output{
+  	color:#666;
+  }

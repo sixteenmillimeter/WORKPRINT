@@ -3,7 +3,7 @@
 	| |     / / __ \/ __ \/ //_// __ \/ __ \/  _/ | / /_  __/
 	| | /| / / / / / /_/ / ,<  / /_/ / /_/ // //  |/ / / /   
 	| |/ |/ / /_/ / _, _/ /| |/ ____/ _, _// // /|  / / /    
-	|__/|__/\____/_/ |_/_/ |_/_/   /_/ |_/___/_/ |_/ /_/ v.9    
+	|__/|__/\____/_/ |_/_/ |_/_/   /_/ |_/___/_/ |_/ /_/ v.10    
 	LE16 - Linear Editor for 16mm                                                       
 */
 
@@ -38,86 +38,86 @@ $('#uploadFile').ajaxForm({
 
 var film = {},
 	//Workprint basic funtionality.
-	WP = {
+WP = {
 		build : function (obj) {
 			'use strict';
 			if (obj!= false && obj !== undefined) {
 				if (obj['@attributes'].version === "5" || obj['@attributes'].version === "4") {
-				console.log('XML2JSON:')
-				console.dir(obj);
-				var cuts = [],
-					reels = [],
-					keys = [];
-				if (this.isArray(obj.sequence.media.video.track)){
-					for (var i in obj.sequence.media.video.track) {
-						if (obj.sequence.media.video.track[i].clipitem !== undefined) {
-							cuts = cuts.concat(obj.sequence.media.video.track[i].clipitem);
+					console.log('XML2JSON:')
+					console.dir(obj);
+					var cuts = [],
+						reels = [],
+						keys = [];
+					if (this.isArray(obj.sequence.media.video.track)){
+						for (var i in obj.sequence.media.video.track) {
+							if (obj.sequence.media.video.track[i].clipitem !== undefined) {
+								cuts = cuts.concat(obj.sequence.media.video.track[i].clipitem);
+							}
 						}
+						cuts.sort(this.sortTracks);
+					} else {
+						cuts = obj.sequence.media.video.track.clipitem;
 					}
-					cuts.sort(this.sortTracks);
-				} else {
-					cuts = obj.sequence.media.video.track.clipitem;
-				}
-				//populate film data
-				film.deanLearner = new brain.NeuralNetwork();
-				film.type = "film";
-				film.name = obj.sequence.name;
-				film.id = uuid();
-				film.reels = [];
-				film.cuts = [];
-				//console.dir(film);
-				for (var i in cuts) {
-					//Isolate reels, put into objects/arrays
-					if ( $.inArray(cuts[i].name + '**' + cuts[i].duration, reels) === -1) {
-						var unique = reels.length;
-						reels[unique] = cuts[i].name + '**' + cuts[i].duration;
-						film.reels[unique] = {};
-						film.reels[unique].type = 'reel';
-						film.reels[unique].id = uuid();
-						keys[reels[unique]] = film.reels[unique].id;
-						film.reels[unique].name = cuts[i].name;
-						film.reels[unique].keycode = {'i':null,'o':null};
-						film.reels[unique].frames = null;
-						film.reels[unique].footage = null;
-						film.reels[unique].rough = this.toRough((parseInt(cuts[i].duration) - 1), parseFloat(cuts[i].rate.timebase));
-						film.reels[unique].realtime = null;
-						film.reels[unique].digital = parseInt(cuts[i].duration) - 1; //SUBTRACTING 1 FROM FCP REPORTED LENGTH, so 0 = 0 not 0 = 1
-						film.reels[unique].timecode = this.toTimecode(parseInt(film.reels[unique].digital), parseFloat(cuts[i].rate.timebase));
-						film.reels[unique].deviate = 0;
-						film.reels[unique].C = 0;
-						film.reels[unique].filename = null;
-						film.reels[unique].framerate = parseFloat(cuts[i].rate.timebase);
-						if (film.reels[unique].framerate === 30) {
-							film.reels[unique].framerate = 29.97;
+					//populate film data
+					film.deanLearner = new brain.NeuralNetwork();
+					film.type = "film";
+					film.name = obj.sequence.name;
+					film.id = uuid();
+					film.reels = [];
+					film.cuts = [];
+					//console.dir(film);
+					for (var i in cuts) {
+						//Isolate reels, put into objects/arrays
+						if ( $.inArray(cuts[i].name + '**' + cuts[i].duration, reels) === -1) {
+							var unique = reels.length;
+							reels[unique] = cuts[i].name + '**' + cuts[i].duration;
+							film.reels[unique] = {};
+							film.reels[unique].type = 'reel';
+							film.reels[unique].id = uuid();
+							keys[reels[unique]] = film.reels[unique].id;
+							film.reels[unique].name = cuts[i].name;
+							film.reels[unique].keycode = {'i':null,'o':null};
+							film.reels[unique].frames = null;
+							film.reels[unique].footage = null;
+							film.reels[unique].rough = this.toRough((parseInt(cuts[i].duration) - 1), parseFloat(cuts[i].rate.timebase));
+							film.reels[unique].realtime = null;
+							film.reels[unique].digital = parseInt(cuts[i].duration) - 1; //SUBTRACTING 1 FROM FCP REPORTED LENGTH, so 0 = 0 not 0 = 1
+							film.reels[unique].timecode = this.toTimecode(parseInt(film.reels[unique].digital), parseFloat(cuts[i].rate.timebase));
+							film.reels[unique].deviate = 0;
+							film.reels[unique].C = 0;
+							film.reels[unique].filename = null;
+							film.reels[unique].framerate = parseFloat(cuts[i].rate.timebase);
+							if (film.reels[unique].framerate === 30) {
+								film.reels[unique].framerate = 29.97;
+							}
 						}
-					}
-					//Isolate cuts, put into objects/arrays
-					film.cuts[i] = {};
-					film.cuts[i].type = 'cut';
-					film.cuts[i].index = parseInt(i);
-					film.cuts[i].id = uuid();
+						//Isolate cuts, put into objects/arrays
+						film.cuts[i] = {};
+						film.cuts[i].type = 'cut';
+						film.cuts[i].index = parseInt(i);
+						film.cuts[i].id = uuid();
 
-					film.cuts[i].reel = cuts[i].name;
-					film.cuts[i].digital = {
-						'i' : parseInt(cuts[i].in),
-						'o' : parseInt(cuts[i].out)
-					};
-					film.cuts[i].feet = {'i' : null, 'o' : null};
-					film.cuts[i].keycode = {'i':null,'o':null};
-					//film.cuts[i].realtime = {'i' : null, 'o' : null};
-					film.cuts[i].timecode = {
-						'i' : this.toTimecode(cuts[i].in, cuts[i].rate.timebase),
-						'o' : this.toTimecode(cuts[i].out, cuts[i].rate.timebase)
-					};
-					film.cuts[i].deviate = 0;
-					film.cuts[i].location = {
-						'start' : parseInt(cuts[i].start),
-						'end' : parseInt(cuts[i].end)
-					};
+						film.cuts[i].reel = cuts[i].name;
+						film.cuts[i].digital = {
+							'i' : parseInt(cuts[i].in),
+							'o' : parseInt(cuts[i].out - 1)
+						};
+						film.cuts[i].feet = {'i' : null, 'o' : null};
+						film.cuts[i].keycode = {'i':null,'o':null};
+						//film.cuts[i].realtime = {'i' : null, 'o' : null};
+						film.cuts[i].timecode = {
+							'i' : this.toTimecode(cuts[i].in, cuts[i].rate.timebase),
+							'o' : this.toTimecode(cuts[i].out, cuts[i].rate.timebase)
+						};
+						film.cuts[i].deviate = 0;
+						film.cuts[i].location = {
+							'start' : parseInt(cuts[i].start),
+							'end' : parseInt(cuts[i].end)
+						};
+					}
+					this.detectBlack();
+					this.dataInput();
 				}
-				this.detectBlack();
-				this.dataInput();
-			}
 			return false;
 		}
 	},
@@ -320,6 +320,17 @@ var film = {},
 		}
 		
 		return false;
+	},
+	//@returns reels.json with all reels data stored in it for upload
+	saveReelsToFile : function () {
+		$.ajax({
+			'url': 'php/reels.php',
+			'type': 'POST',
+			'data': JSON.stringify(film.reels),
+			'success': function (data){
+			}
+		});
+		
 	},
 	//Traverses film.cuts Array and updates the ones that name match the reel
 	//@returns: modified film.cuts Array
@@ -614,21 +625,29 @@ var film = {},
 		return 0;
 	}
 },
+
 //Calculator for mobile
 WPcalc = {
 	_ui : function () {
 		'use strict';
 		$('#WPcalc input').bind('change', function () {
 			var id = $(this).attr('id'),
-				val = $(this).val();
+				val = $(this).val(),
+				out = '';
 			if (id === '') {
 
 			} else if (id === '0') {
-
+				
 			}
+			$('input#output').val(out);
 		});
 	},
+	firstCase: function () {
 
+	},
+	secondCase: function () {
+		
+	}
 }
 
 /*
