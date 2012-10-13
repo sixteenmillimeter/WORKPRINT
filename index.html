@@ -8,7 +8,7 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -16,7 +16,7 @@
     </style>
     <link href="bootstrap-responsive.css" rel="stylesheet">
 
-    <link href="style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -84,7 +84,7 @@
             </div>
           </div>
           <br />
-          <form id="uploadFile" action="xml2json.php" method="POST" enctype="multipart/form-data" class="well" style="margin-top: -17px;" action="">
+          <form id="uploadFile" action="php/xml2json.php" method="POST" enctype="multipart/form-data" class="well" style="margin-top: -17px;" action="">
             <h3>Upload an .xml file</h3>
             <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
             <input id="browseFile" name="file" type="file" class="span3" placeholder="Choose a file..." />
@@ -269,8 +269,8 @@
     <!-- THE javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="jquery.min.js"></script>
-    <script src="jquery.form.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.form.js"></script>
     <!--
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-transition.js"></script>
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-alert.js"></script>
@@ -285,8 +285,8 @@
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-carousel.js"></script>
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-typeahead.js"></script>
   -->
-    <script src="http://cloud.github.com/downloads/harthur/brain/brain-0.5.0.min.js"></script>
-    <script src="script.js"></script>
-    <script src="workprint.js"></script>
+    <!--<script src="http://cloud.github.com/downloads/harthur/brain/brain-0.5.0.min.js"></script>
+    <script src="js/script.js"></script>-->
+    <script src="js/workprint.js"></script>
   </body>
 </html>
