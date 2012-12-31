@@ -555,6 +555,7 @@ WP.compare = function (reel) {
 //@param: C - float (correction value)
 //@returns: integer
 WP.correct = function (frames, C) {
+	'use strict';
 	return Math.round(frames + (frames * C));
 };
 
@@ -640,11 +641,11 @@ WP.toFeet = function (frames, start) {
 
 /* WP.toKey
 *
+* to integer from 7 character format
+* @param: frames - integer
+* @param: start - formated String (0000+00)
+* @returns: formated String (0000+00)
 */
-//to integer from 7 character format
-//@param: frames - integer
-//@param: start - formated String (0000+00)
-//@returns: formated String (0000+00)
 WP.toKey = function (frames, start) {
 	'use strict';
 	if (start !== null && start !== undefined && start !== '0000+00') {
@@ -659,8 +660,8 @@ WP.toKey = function (frames, start) {
 *
 * Always represented in padded values
 *
-//@param: key - formatted String (0000+00)
-//@returns: integer
+* @param: key - formatted String (0000+00)
+* @returns: integer
 *
 */
 
@@ -794,15 +795,17 @@ WPcalc._ui = function () {
 /* WPcalc.firstCase
 *
 */
-WPcalc.firstCase = function () {
+WPcalc.firstCase = function (val) {
+	'use strict';
 
 };
 
 /* WPcalc.secondCase
 *
 */
-WPcalc.secondCase = function () {
-		
+WPcalc.secondCase = function (val) {
+	'use strict';
+			
 };
 
 /*
