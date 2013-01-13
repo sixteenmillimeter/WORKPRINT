@@ -122,18 +122,10 @@ WP.dataInput = function () {
 	$('#uploadFile').fadeOut('560');
 	$('#keycodeEntry').delay('560').fadeIn('600');
 
-	var storeIndex = $.jStorage.index();
-	for (var i in storeIndex) {
-		for (var x in film.reels) {
-			if (storeIndex[i] == film.reels[x].digital + film.reels[x].name) {
-				var r = JSON.parse($.jStorage.get(film.reels[x].digital + film.reels[x].name));
-				film.reels[x] = r;
-			}
-		}
-	}
+	WP.getReels();
 
 	//$('#keycodeEntry').empty();
-	console.log(film.reels.length);
+	//console.log(film.reels.length);
 	var rowCount = 0;
 	for (var i = 0; i < film.reels.length; i++) {
 		var which = i % 2;
@@ -239,6 +231,7 @@ WP.detectBlack = function () {
 		//console.log('OUT: ' + film.cuts[i].location.end);
 		if (prev.o !== film.cuts[i].location.start && prev.o !== undefined) {
 			var obj = {
+				C: 0,
 				deviate : 0,
 				digital : {
 					i : 0,
@@ -293,6 +286,15 @@ WP.correctBlack = function () {
 				film.cuts[i].C = film.cuts[i-1].C;
 				film.cuts[i].framerate = film.cuts[i-1].framerate;
 			}
+			if (film.cuts[i].C === undefined) {
+				var x = 0;
+				while (film.cuts[i].C === undefined) {
+					film.cuts[i].C = film.cuts[i + x].C;
+					film.cuts[i].framerate = film.cuts[i + x].framerate;
+					x += 1;
+				}
+			}
+
 			film.cuts[i].frames = {};
 			film.cuts[i].frames.i = 0;
 			film.cuts[i].frames.o = this.correct(this.pulldown(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate), film.cuts[i].C)
@@ -304,9 +306,8 @@ WP.correctBlack = function () {
 			film.cuts[i].feet.o = this.toFeet(film.cuts[i].frames.o);
 			totalBlack += film.cuts[i].frames.o;
 			videoBlack += film.cuts[i].digital.o;
-			//Whatever the last one is, likely the same as all of them
+			//Whatever the most recent one is, likely the same as all of them
 			rate = film.cuts[i].framerate;
-			//console.dir(film.cuts[i]);
 		}
 	}
 	if (totalBlack !== 0) {
@@ -314,7 +315,7 @@ WP.correctBlack = function () {
 			frames : totalBlack,
 			footage : this.toFeet(totalBlack),
 			digital : videoBlack,
-			timecode : this.toTimecode(videoBlack,film.cuts[i].framerate),
+			timecode : this.toTimecode(videoBlack, rate),
 			name : '*BLACK*',
 			framerate : rate,
 			keycode : {
@@ -336,15 +337,27 @@ WP.correctBlack = function () {
 //
 WP.storeReel = function (reel) {
 	'use strict';
-	//console.dir(reel);
+	console.dir(reel);
 	var index = $.jStorage.index();
 	if ($.inArray(reel.digital + reel.name, index) === -1) {
 		$.jStorage.set(reel.digital + reel.name, JSON.stringify(reel));
 	} else if ($.inArray(reel.digital + reel.name, index) === 0) {
 
 	}
-	
 	return false;
+};
+
+WP.getReels = function () {
+	'use strict';
+	var storeIndex = $.jStorage.index();
+	for (var i in storeIndex) {
+		for (var x in film.reels) {
+			if (storeIndex[i] == film.reels[x].digital + film.reels[x].name) {
+				var r = JSON.parse($.jStorage.get(film.reels[x].digital + film.reels[x].name));
+				film.reels[x] = r;
+			}
+		}
+	}
 };
 
 /* WP.saveReelsToFile()
@@ -361,7 +374,6 @@ WP.saveReelsToFile = function () {
 			
 		}
 	});
-	
 };
 
 /* WP.
@@ -463,10 +475,11 @@ WP.displayCutlist = function () {
 	$('#keycodeEntry').fadeOut(482);
 	$('#cutlist table tbody').empty();
 	film.cuts = this.reIndex(film.cuts);
+	film.reels.sort(WP.sortReels);
 	console.log('FILM OBJECT:');
 	console.dir(film);
 	for(var i in film.cuts){
-		if(film.cuts[i].reel !== '*BLACK*') {
+		if (film.cuts[i].reel !== '*BLACK*') {
 			film.cuts[i].keycode.i = this.normalArray(film.cuts[i].keycode.i);
 			film.cuts[i].keycode.o = this.normalArray(film.cuts[i].keycode.o);
 		}
@@ -683,6 +696,7 @@ WP.reIndex = function (arr) {
 	}
 	return arr;
 };
+
 /* WP.zeroPad
 *
 * Lower level functions
@@ -770,6 +784,17 @@ WP.sortCuts = function (a, b) {
 	}
 	return 0;
 };
+
+WP.sortReels = function (a, b) {
+	'use strict';
+	if (a['name'] < b['name']) {
+		return -1;
+	}
+	if (a['name'] > b['name']) {
+		return 1;
+	}
+	return 0;
+}
 
 //Calculator for mobile
 var WPcalc = {};
@@ -906,7 +931,7 @@ $('#uploadFile').ajaxForm({
 });
 
 /*
-Copyright (c) 2012 Matthew McWilliams matt@sixteenmillimeter.com
+Copyleft 2012 M. McWilliams matt@sixteenmillimeter.com
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
