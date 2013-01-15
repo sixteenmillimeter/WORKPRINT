@@ -334,7 +334,6 @@ WP.correctBlack = function () {
 * @param: reel Object 
 * @returns: jStorage key "reels"
 */
-//
 WP.storeReel = function (reel) {
 	'use strict';
 	console.dir(reel);
@@ -362,9 +361,8 @@ WP.getReels = function () {
 
 /* WP.saveReelsToFile()
 *
-* 
+* @returns reels.json with all reels data stored in it for upload
 */
-//@returns reels.json with all reels data stored in it for upload
 WP.saveReelsToFile = function () {
 	$.ajax({
 		'url': 'php/reels.php',
@@ -380,9 +378,8 @@ WP.saveReelsToFile = function () {
 * Traverses film.cuts Array and updates the ones that name match the reel
 *
 * @param	reel 	Object 	updated reel Object with keycode data
+* @returns: modified film.cuts Array
 */
-//
-//@returns: modified film.cuts Array
 WP.updateCuts = function (reel) {
 	'use strict';
 	//change display
@@ -463,6 +460,63 @@ WP.editLearn = function (d, f, C, newNew) {
 			film: newNew
 		}}]);
 	*/
+};
+
+WP.genStats = function () {
+	'use strict';
+	var r = film.reels,
+	c = film.cuts,
+	f = {
+		all : {
+			frames : 0,
+			digital : 0,
+			deviate : 0,
+			reels : 0,
+			framerate : 29.97,
+			C : 0, //GENERATE BASED ON NEW TOTAL DATA
+ 			avg : {
+				digital : 0,
+				frames : 0,
+				C : 0
+
+			}
+		},
+		edit : {
+			frames : 0,
+			digital : 0,
+			framerate : 0,
+			deviate : 0,
+			ratio : 0,
+			cuts : 0,
+			avg : { //per shot
+				frames : 0,
+				digital : 0,
+				deviate : 0
+			}
+		}
+	},
+	r = [];
+	for (var i in r) {
+		if (r[i].name !== '*BLACK*') {
+			f.all.frames += r[i].frames;
+			f.all.digital += r[i].digital;
+			f.all.avg.C += r[i].C;
+			f.all.reels += 1;
+		}
+	}
+	f.all.deviate = reel.frames - this.pulldown(f.all.digital, f.all.framerate);
+	f.all.C = f.all.deviate / f.all.frames;
+	f.all.avg = {
+		digital : Math.round(f.all.digital / f.all.reels),
+		frames : Math.round(f.all.frames / f.all.reels),
+		C : f.all.avg.C / f.all.reels;
+	}
+	for (var x in c) {
+		f.edit.digital += c[x].digital;
+		f.edit.frames += c[x].frames;
+		f.edit.deviate += c[x].deviate;
+		f.edit.cuts += 1;
+	}
 };
 
 /* WP.displayCutlist
@@ -551,9 +605,10 @@ WP.normalDisplay = function (val) {
 
 /* WP.compare
 *
+* @param: reel - object derived from xml
+* @returns: object with corrections applied
 */
-//@param: reel - object derived from xml
-//@returns: object with corrections applied
+
 WP.compare = function (reel) {
 	'use strict';
 	reel.deviate = reel.frames - this.pulldown(reel.digital, reel.framerate);
@@ -563,10 +618,10 @@ WP.compare = function (reel) {
 
 /* WP.correct
 *
+* @param: frames - integer
+* @param: C - float (correction value)
+* @returns: integer
 */
-//@param: frames - integer
-//@param: C - float (correction value)
-//@returns: integer
 WP.correct = function (frames, C) {
 	'use strict';
 	return Math.round(frames + (frames * C));
@@ -574,22 +629,22 @@ WP.correct = function (frames, C) {
 
 /* WP.pulldown
 *
+* @param: d - integer
+* @param: framerate - float
+* @returns: integer
 */
-//@param: d - integer
-//@param: framerate - float
-//@returns: integer
 WP.pulldown = function (d, framerate) {
 	'use strict';
 	return Math.floor((d/framerate) * 24);
 };
 
 /* WP.toRough
-*
+* gives a reneral estimate of the length of the roll, probably good within 3-5 frames for 100' rolls
+* 
+* @param: frames - integer
+* @param: framerate - float
+* @returns: formatted String (0+00')
 */
-//gives a reneral estimate of the length of the roll, probably good within 3-5 frames for 100' rolls
-//@param: frames - integer
-//@param: framerate - float
-//@returns: formatted String (0+00')
 WP.toRough = function (frames, framerate) {
 	'use strict';
 	var n = Math.floor((frames/framerate) * 24);
@@ -597,12 +652,12 @@ WP.toRough = function (frames, framerate) {
 };
 
 /* WP.toTimecode
-*
+* toTimecode all that is needed for now
+* 
+* @param: frames - integer
+* @param: rate - float
+* @returns: formatted String (00:00;00)
 */
-//toTimecode all that is needed for now
-//@param: frames - integer
-//@param: rate - float
-//@returns: formatted String (00:00;00)
 WP.toTimecode = function (frames, rate) {
 	'use strict';
 	var str = '';
@@ -621,12 +676,12 @@ WP.toTimecode = function (frames, rate) {
 };
 
 /* WP.fromFeet
-*
+* All feet measurements must be marked with trailing '
+* can be unpadded with preceding 0
+* 
+* @param: footage - formated String (0+00')
+* @returns: frames - integer
 */
-//All feet measurements must be marked with trailing '
-//can be unpadded with preceding 0
-//@param: footage - formated String (0+00')
-//@returns: frames - integer
 WP.fromFeet = function (footage) {
 	'use strict';
 	var pieces = footage.split('+'),
@@ -636,12 +691,12 @@ WP.fromFeet = function (footage) {
 };
 
 /* WP.toFeet
-*
+* Convert frame count to footage notation 0+00'
+* 
+* @param: frames - integer
+* @param: start - formated String (optional)
+* @returns: formatted String (0+00')
 */
-//Convert frame count to footage notation 0+00'
-//@param: frames - integer
-//@param: start - formated String (optional)
-//@returns: formatted String (0+00')
 WP.toFeet = function (frames, start) {
 	'use strict';
 	if (start !== null && start !== undefined && start !== "0+00'") {
@@ -653,8 +708,8 @@ WP.toFeet = function (frames, start) {
 };
 
 /* WP.toKey
-*
 * to integer from 7 character format
+*
 * @param: frames - integer
 * @param: start - formated String (0000+00)
 * @returns: formated String (0000+00)
@@ -670,12 +725,10 @@ WP.toKey = function (frames, start) {
 };
 
 /* WP.fromKey
-*
 * Always represented in padded values
 *
 * @param: key - formatted String (0000+00)
 * @returns: integer
-*
 */
 
 WP.fromKey = function (key) {
@@ -698,7 +751,6 @@ WP.reIndex = function (arr) {
 };
 
 /* WP.zeroPad
-*
 * Lower level functions
 * Adds leading zeros of any length
 *
@@ -713,7 +765,6 @@ WP.zeroPad = function (num, places) {
 };
 
 /* WP.isFeet
-*
 * To differentiate feet formatted Strings from keycode strings
 * (hopefully never needed)
 *
@@ -737,7 +788,6 @@ WP.isKey = function (str) {
 };
 
 /* WP.isArray
-*
 * Determines if input is an Object or an Array
 *
 * @param 	obj 	Object or Array
@@ -747,8 +797,8 @@ WP.isArray = function (obj) {
 	'use strict';
 	return obj.constructor == Array;
 };
+
 /* WP.sortTracks
-*
 * Used to sort cuts from multi-track sequences with the
 * start parameter.
 *
@@ -766,8 +816,8 @@ WP.sortTracks = function (a, b) {
 	}
 	return 0;
 };
+
 /* WP.sortCuts
-*
 * Used to sort cuts by location within the sequence
 *
 * @param	a 	Object 	a cut
