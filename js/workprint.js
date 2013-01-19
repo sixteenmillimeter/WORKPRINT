@@ -35,73 +35,28 @@ WP.build = function (obj) {
 			console.dir(obj);
 			var cuts = [],
 				reels = [],
-				keys = [];
-			if (this.isArray(obj.sequence.media.video.track)){
-				for (var i in obj.sequence.media.video.track) {
-					if (obj.sequence.media.video.track[i].clipitem !== undefined) {
-						cuts = cuts.concat(obj.sequence.media.video.track[i].clipitem);
+				track = obj.sequence.media.video.track
+			if (this.isArray(track)){
+				for (var i = 0; i < track.length; i++) {
+					if (track[i].clipitem !== undefined) {
+						cuts = cuts.concat(track[i].clipitem);
 					}
 				}
 				cuts.sort(this.sortTracks);
 			} else {
 				cuts = obj.sequence.media.video.track.clipitem;
 			}
-			//populate film data
-			film.type = "film";
-			film.name = obj.sequence.name;
-			film.id = uuid();
-			film.reels = [];
-			film.cuts = [];
-			//console.dir(film);
-			for (var i in cuts) {
-				//Isolate reels, put into objects/arrays
+			film = new Film(obj.sequence.name);
+			for (var i = 0; i < cuts.length; i++) {
 				if ( $.inArray(cuts[i].name + '**' + cuts[i].duration, reels) === -1) {
-					var unique = reels.length;
-					reels[unique] = cuts[i].name + '**' + cuts[i].duration;
-					film.reels[unique] = {};
-					film.reels[unique].type = 'reel';
-					film.reels[unique].id = uuid();
-					keys[reels[unique]] = film.reels[unique].id;
-					film.reels[unique].name = cuts[i].name;
-					film.reels[unique].keycode = {'i':null,'o':null};
-					film.reels[unique].frames = null;
-					film.reels[unique].footage = null;
-					film.reels[unique].rough = this.toRough((parseInt(cuts[i].duration) - 1), parseFloat(cuts[i].rate.timebase));
-					film.reels[unique].realtime = null;
-					film.reels[unique].digital = parseInt(cuts[i].duration) - 1; //SUBTRACTING 1 FROM FCP REPORTED LENGTH, so 0 = 0 not 0 = 1
-					film.reels[unique].timecode = this.toTimecode(parseInt(film.reels[unique].digital), parseFloat(cuts[i].rate.timebase));
-					film.reels[unique].deviate = 0;
-					film.reels[unique].C = 0;
-					film.reels[unique].filename = null;
-					film.reels[unique].framerate = parseFloat(cuts[i].rate.timebase);
-					if (film.reels[unique].framerate === 30) {
-						film.reels[unique].framerate = 29.97;
-					}
+					var r = new Reel(cuts[i].name, cuts[i].duration, cuts[i].rate.timebase);
+					film.reels.push(r);
+					reels.push(cuts[i].name + '**' + cuts[i].duration);
 				}
-				//Isolate cuts, put into objects/arrays
-				film.cuts[i] = {};
-				film.cuts[i].type = 'cut';
-				film.cuts[i].index = parseInt(i);
-				film.cuts[i].id = uuid();
-
-				film.cuts[i].reel = cuts[i].name;
-				film.cuts[i].digital = {
-					'i' : parseInt(cuts[i].in),
-					'o' : parseInt(cuts[i].out - 1)
-				};
-				film.cuts[i].feet = {'i' : null, 'o' : null};
-				film.cuts[i].keycode = {'i':null,'o':null};
-				//film.cuts[i].realtime = {'i' : null, 'o' : null};
-				film.cuts[i].timecode = {
-					'i' : this.toTimecode(cuts[i].in, cuts[i].rate.timebase),
-					'o' : this.toTimecode(cuts[i].out, cuts[i].rate.timebase)
-				};
-				film.cuts[i].deviate = 0;
-				film.cuts[i].location = {
-					'start' : parseInt(cuts[i].start),
-					'end' : parseInt(cuts[i].end)
-				};
+				var c = new Cut(cuts[i].name, cuts[i].in, cuts[i].out, cuts[i].rate.timebase, cuts[i].start, cuts[i].end);
+				film.cuts.push(c);
 			}
+			film.reels.sort(WP.sortReels);
 			this.detectBlack();
 			this.dataInput();
 		}
@@ -224,41 +179,22 @@ WP.saveKeycode = function ($elem) {
 */
 WP.detectBlack = function () {
 	'use strict';
-	var prev = {},
-		black = [];
-	for (var i in film.cuts) {
-		//console.log('IN: ' + film.cuts[i].location.start);
-		//console.log('OUT: ' + film.cuts[i].location.end);
-		if (prev.o !== film.cuts[i].location.start && prev.o !== undefined) {
-			var obj = {
-				C: 0,
-				deviate : 0,
-				digital : {
-					i : 0,
-					o : 0
-				},
-				id : uuid(),
-				index : 0,
-				keycode : {
-					i : ['    ','    ','    '],
-					o : ['    ','    ','    ']
-				},
-				location : {
-					start : prev.o,
-					end : film.cuts[i].location.start
-				},
-				reel : "*BLACK*",
-				feet : {
-					i : '',
-					o : ''
-				},
-				timecode : {
-					i : '',
-					o : ''
-				},
-				type : "cut"
-			};
-			black.push(obj);
+	var prev = {
+		i : 0,
+		o : 0
+	},
+	blackReel = {
+		i : 0,
+		o : 0
+	},
+	black = [];
+	for (var i = 0; i < film.cuts.length; i++) {
+		var start = film.cuts[i].location.start;
+		if (prev.o !== start) {
+			blackReel.o += start - prev.o;
+			var b = new Cut('*BLACK*', blackReel.i, blackReel.o, 29.97, prev.o, start);
+			black.push(b);
+			blackReel.i += start - prev.o;
 		}
 		prev.i = film.cuts[i].location.start;
 		prev.o = film.cuts[i].location.end;
@@ -277,13 +213,13 @@ WP.correctBlack = function () {
 	var totalBlack = 0,
 		videoBlack = 0,
 		rate = 29.97;
-	for (var i in film.cuts) {
+	for (var i = 0; i < film.cuts.length; i++) {
 		if (film.cuts[i].reel === '*BLACK*') {
 			if (i === 0) {
 				film.cuts[i].C = film.cuts[i+1].C;
 				film.cuts[i].framerate = film.cuts[i+1].framerate;
 			} else {
-				film.cuts[i].C = film.cuts[i-1].C;
+				film.cuts[i].C = film.cuts[i - 1].C;
 				film.cuts[i].framerate = film.cuts[i-1].framerate;
 			}
 			if (film.cuts[i].C === undefined) {
@@ -311,6 +247,7 @@ WP.correctBlack = function () {
 		}
 	}
 	if (totalBlack !== 0) {
+		//TODO replace with Reel
 		var blackReel = {
 			frames : totalBlack,
 			footage : this.toFeet(totalBlack),
@@ -324,7 +261,8 @@ WP.correctBlack = function () {
 			},
 			deviate : totalBlack - this.pulldown(videoBlack, rate),
 			C : (totalBlack - this.pulldown(videoBlack, rate)) / totalBlack
-		}
+		};
+
 		film.reels.push(blackReel);
 	}
 };
@@ -337,12 +275,7 @@ WP.correctBlack = function () {
 WP.storeReel = function (reel) {
 	'use strict';
 	console.dir(reel);
-	var index = $.jStorage.index();
-	if ($.inArray(reel.digital + reel.name, index) === -1) {
-		$.jStorage.set(reel.digital + reel.name, JSON.stringify(reel));
-	} else if ($.inArray(reel.digital + reel.name, index) === 0) {
-
-	}
+	$.jStorage.set(reel.digital + reel.name, JSON.stringify(reel));
 	return false;
 };
 
@@ -468,32 +401,33 @@ WP.genStats = function () {
 	c = film.cuts,
 	f = {
 		all : {
-			frames : 0,
-			digital : 0,
-			deviate : 0,
-			reels : 0,
+			frames : 0, //x
+			digital : 0, //x
+			deviate : 0, //x
+			reels : 0, //x
 			framerate : 29.97,
 			C : 0, //GENERATE BASED ON NEW TOTAL DATA
  			avg : {
-				digital : 0,
-				frames : 0,
-				C : 0
+				digital : 0, //x
+				frames : 0, //x
+				C : 0 //x
 
 			}
 		},
 		edit : {
-			frames : 0,
-			digital : 0,
-			framerate : 0,
-			deviate : 0,
-			ratio : 0,
-			cuts : 0,
+			frames : 0, //
+			digital : 0, //
+			framerate : 0, //
+			deviate : 0, //
+			ratio : 0, //
+			cuts : 0, //
 			avg : { //per shot
-				frames : 0,
-				digital : 0,
-				deviate : 0
+				frames : 0, //
+				digital : 0, //
+				deviate : 0 //
 			}
-		}
+		},
+		reels : []
 	},
 	r = [];
 	for (var i in r) {
@@ -502,21 +436,25 @@ WP.genStats = function () {
 			f.all.digital += r[i].digital;
 			f.all.avg.C += r[i].C;
 			f.all.reels += 1;
+			//
 		}
 	}
 	f.all.deviate = reel.frames - this.pulldown(f.all.digital, f.all.framerate);
 	f.all.C = f.all.deviate / f.all.frames;
-	f.all.avg = {
-		digital : Math.round(f.all.digital / f.all.reels),
-		frames : Math.round(f.all.frames / f.all.reels),
-		C : f.all.avg.C / f.all.reels;
-	}
+	f.all.avg.digital = Math.round(f.all.digital / f.all.reels),
+	f.all.avg.frames = Math.round(f.all.frames / f.all.reels),
+	f.all.avg.C = f.all.avg.C / f.all.reels;
+
 	for (var x in c) {
+		//c[i].
 		f.edit.digital += c[x].digital;
 		f.edit.frames += c[x].frames;
 		f.edit.deviate += c[x].deviate;
 		f.edit.cuts += 1;
+		//
+
 	}
+	f.edit.ratio = f.edit.frames / f.all.frames;
 };
 
 /* WP.displayCutlist
@@ -533,9 +471,13 @@ WP.displayCutlist = function () {
 	console.log('FILM OBJECT:');
 	console.dir(film);
 	for(var i in film.cuts){
-		if (film.cuts[i].reel !== '*BLACK*') {
-			film.cuts[i].keycode.i = this.normalArray(film.cuts[i].keycode.i);
-			film.cuts[i].keycode.o = this.normalArray(film.cuts[i].keycode.o);
+		film.cuts[i].keycode.i = this.normalArray(film.cuts[i].keycode.i);
+		film.cuts[i].keycode.o = this.normalArray(film.cuts[i].keycode.o);
+		if (film.cuts[i].keycode.i[2] === '') {
+			film.cuts[i].keycode.i[2] = '~ ' + film.cuts[i].rough.i;
+		}
+		if (film.cuts[i].keycode.o[2] === '') {
+			film.cuts[i].keycode.o[2] = '~ ' + film.cuts[i].rough.o;
 		}
 	}
 	$('#cutDisplay').tmpl(film.cuts).appendTo('#cutlist table tbody');
@@ -608,7 +550,6 @@ WP.normalDisplay = function (val) {
 * @param: reel - object derived from xml
 * @returns: object with corrections applied
 */
-
 WP.compare = function (reel) {
 	'use strict';
 	reel.deviate = reel.frames - this.pulldown(reel.digital, reel.framerate);
@@ -744,7 +685,7 @@ WP.fromKey = function (key) {
 * @returns	Array of objects with corrected index 
 */
 WP.reIndex = function (arr) {
-	for (var i in arr) {
+	for (var i = 0; i < arr.length; i++) {
 		arr[i].index  = i;
 	}
 	return arr;
@@ -844,6 +785,70 @@ WP.sortReels = function (a, b) {
 		return 1;
 	}
 	return 0;
+};
+
+function Film (fname) {
+	this.type = "film";
+	this.name = fname;
+	this.id = uuid();
+	this.reels = [];
+	this.cuts = [];
+}
+
+function Reel (cname, cduration, ctimebase) {
+	this.type = 'reel';
+	this.id = uuid();
+	this.name = cname;
+	this.keycode = {'i': null,'o': null};
+	this.frames = null;
+	this.footage = null;
+	this.framerate = parseFloat(ctimebase);
+	if (this.framerate === 30) {
+		this.framerate = 29.97;
+	}
+	this.rough = WP.toRough((parseInt(cduration) - 1), this.framerate);
+	this.realtime = null;
+	this.digital = parseInt(cduration) - 1; //SUBTRACTING 1 FROM FCP REPORTED LENGTH, so 0 = 0 not 0 = 1
+	this.timecode = WP.toTimecode(parseInt(this.digital), this.framerate);
+	this.deviate = 0;
+	this.C = 0;
+	this.filename = null;
+}
+
+function Cut (cname, cin, cout, ctimebase, cstart, cend) {
+	this.type = 'cut';
+	this.id = uuid();
+	this.reel = cname;
+	this.digital = {
+		'i' : parseInt(cin),
+		'o' : parseInt(cout) - 1
+	};
+	this.framerate = parseFloat(ctimebase);
+	if (this.framerate === 30) {
+		this.framerate = 29.97;
+	}
+	this.frames = {'i': null,'o': null};
+	this.feet = {'i' : null, 'o' : null};
+	this.keycode = {'i' : null, 'o' : null};
+	//this.realtime = {'i' : null, 'o' : null};
+	this.timecode = {
+		'i' : WP.toTimecode(this.digital.i, this.framerate),
+		'o' : WP.toTimecode(this.digital.o, this.framerate)
+	};
+	this.rough = {
+		'i' : WP.toRough(this.digital.i, this.framerate),
+		'o' : WP.toRough(this.digital.o, this.framerate)
+	};
+	this.deviate = 0;
+	this.location = {
+		'start' : parseInt(cstart),
+		'end' : parseInt(cend)
+	};
+	this.C = 0;
+}
+
+function Stats () {
+
 }
 
 //Calculator for mobile
@@ -882,7 +887,6 @@ WPcalc.secondCase = function (val) {
 	'use strict';
 			
 };
-
 /*
 OBJECT STRUCTURE
 var reel = {
@@ -934,6 +938,9 @@ var cut = {
 	timecode : { //represented at framerate grabbed from the object
 		"i" : "00:00:00",
 		"o" : "00:00:00"
+	}
+	rough : {
+		"i" : 
 	}
 	"deviate" : 0, //frames of deviation d/a occuring within the cut, determined by length
 	location : { //location in sequence, digital value, to be converted, valuable for determining black space... hmmm
