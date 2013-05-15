@@ -951,6 +951,8 @@ var film = {
 }
 */
 
+WP.api = {};
+
 $('#upload').bind('click', function () {
 	'use strict';
 	$('#landing').fadeOut('560');
