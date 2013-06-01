@@ -69,7 +69,7 @@
       <form id="uploadFile" action="php/xml2json.php" method="POST" enctype="multipart/form-data" class="well" style="margin-top: -17px;" action="">
         <h3>Upload an .xml file</h3>
         <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
-        <input id="browseFile" name="file" type="file" class="span3" placeholder="Choose a file..." />
+        <input id="browseFile" name="file" type="file" class="span3" placeholder="Choose a file..." onchange="WP.xml2json(this);" />
         <p class="help-block">Choose a Final cut project that has been exported using their <a href="http://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=97%26section=3%26tasks=true" target="blank">XML Interchange Format</a>, version 4+</p>
         <input type="submit" value="Build Cutlist" name="submit" class="btn btn-primary disabled" id="loadFile">
       </form>
@@ -254,8 +254,9 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="js/jquery.min.js"></script>
-    <script src="js/jquery.form.js"></script>
     <!--
+    <script src="js/jquery.form.js"></script>
+    
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-transition.js"></script>
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-alert.js"></script>
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-modal.js"></script>
@@ -268,9 +269,13 @@
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-collapse.js"></script>
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-carousel.js"></script>
     <script src="https://raw.github.com/twitter/bootstrap/gh-pages/assets/js/bootstrap-typeahead.js"></script>
+    -->
+    <!--
+    <script src="http://cloud.github.com/downloads/harthur/brain/brain-0.5.0.min.js"></script>
+    <script src="js/script.js"></script>
   -->
-    <!--<script src="http://cloud.github.com/downloads/harthur/brain/brain-0.5.0.min.js"></script>
-    <script src="js/script.js"></script>-->
+    <script src="js/xml2json.js"></script>
     <script src="js/workprint.js"></script>
+    <script src="js/script.js"></script>
   </body>
 </html>
