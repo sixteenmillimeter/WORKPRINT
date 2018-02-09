@@ -528,13 +528,13 @@ WP.displayCutlist = function () {
 };
 
 /**
-* Normalize keycode values to 'XXXX00000000+00'
-* format for optimal storage
-*
-* @param {string} j 	Unformatted keycode
-*
-* @return {string} 		Formatted keycode
-*/
+ * Normalize keycode values to 'XXXX00000000+00'
+ * format for optimal storage
+ *
+ * @param {string} j 	Unformatted keycode
+ *
+ * @return {string} 		Formatted keycode
+ */
 WP.normal = function (j) {
 	'use strict';
 	var e;
@@ -552,14 +552,14 @@ WP.normal = function (j) {
 };
 
 /**
-* Normalize input and splits keykode into
-* 3 values contained in an Array. Intended to be used
-* on compacted, stored keycode strings.
-*
-* @param	{string} key 	Formatted or unformatted keykode
-*
-* @return 	{array} 		Array of values ["XXXX","0000","0000+00"]
-*/
+ * Normalize input and splits keykode into
+ * 3 values contained in an Array. Intended to be used
+ * on compacted, stored keycode strings.
+ *
+ * @param	{string} key 	Formatted or unformatted keykode
+ *
+ * @return 	{array} 		Array of values ["XXXX","0000","0000+00"]
+ */
 WP.normalArray = function (key) {
 	'use strict';
 	if (key === null) {return ['','','']}
@@ -572,12 +572,13 @@ WP.normalArray = function (key) {
 };
 
 /**
-* Takes a normalized or unnormalized keykode value and
-* returns a readable value in this form 'XXXX 0000 0000+00'
-*
-* @param	val 	String/Array 	formatted/unformatted String (XXXX00000000+00) || Array[3]
-* @returns	String 	keykode as 'XXXX 0000 0000+00'
-*/
+ * Takes a normalized or unnormalized keykode value and
+ * returns a readable value in this form 'XXXX 0000 0000+00'
+ *
+ * @param	val 	String/Array 	formatted/unformatted String (XXXX00000000+00) || Array[3]
+ *
+ * @returns	String 	keykode as 'XXXX 0000 0000+00'
+ */
 WP.normalDisplay = function (val) {
 	'use strict';
 	if (typeof val === 'object') {
@@ -625,7 +626,7 @@ WP.pulldown = function (d, framerate) {
 };
 
 /* WP.toRough
-* gives a reneral estimate of the length of the roll, probably good within 3-5 frames for 100' rolls
+* gives a general estimate of the length of the roll, probably good within 3-5 frames for 100' rolls
 *
 * @param: frames - integer
 * @param: framerate - float
@@ -653,11 +654,11 @@ WP.toTimecode = function (frames, rate) {
 	var first = Math.floor(frames/rate);
 	if(first > 60) {
 		var second = Math.floor(first/60);
-		str += this.zeroPad(second, 2) + ':' + this.zeroPad(first % 60, 2);
+		str += WP.zeroPad(second, 2) + ':' + WP.zeroPad(first % 60, 2);
 	}else{
-		str += '00:'+this.zeroPad(first, 2);
+		str += '00:'+ WP.zeroPad(first, 2);
 	}
-	str += ';' + this.zeroPad(frames % rate, 2);
+	str += ';' + WP.zeroPad(frames % rate, 2);
 	return str;
 };
 
@@ -690,7 +691,7 @@ WP.toFeet = function (frames, start) {
 	}
 	var feet = Math.floor(frames / 40);
 	frames = frames % 40;
-	return feet + '+' + this.zeroPad(frames, 2) + "'";
+	return feet + '+' + WP.zeroPad(frames, 2) + "'";
 };
 
 /* WP.toKey
@@ -707,7 +708,7 @@ WP.toKey = function (frames, start) {
 	}
 	var first = Math.floor(frames / 20),
 		second = frames % 20;
-	return this.zeroPad(first, 4) + '+' + this.zeroPad(second, 2);
+	return WP.zeroPad(first, 4) + '+' + WP.zeroPad(second, 2);
 };
 
 /* WP.fromKey
@@ -736,30 +737,32 @@ WP.reIndex = function (arr) {
 	return arr;
 };
 
-/* WP.zeroPad
-* Lower level functions
-* Adds leading zeros of any length
-*
-* @param 	num 	integer	number for timecode or keycode formatting
-* @param 	places 	integer length of resulting String
-* @returns 	String (0000 for places=4)
-*/
+/*
+ * Adds leading zeros to fit numeber to string of arbitrary length
+ *
+ * @param 	{integer} num		Number for timecode or keycode formatting
+ * @param 	{integer} places 	Length of resulting string to pad to
+ * 
+ * @return 	{string} (0001 for num=1, places=4)
+ */
 WP.zeroPad = function (num, places) {
 	'use strict';
 	var zero = places - num.toString().length + 1;
-	return Array(+(zero > 0 && zero)).join("0") + num + '';
+	return Array(+(zero > 0 && zero)).join('0') + num + '';
 };
 
-/* WP.isFeet
-* To differentiate feet formatted Strings from keycode strings
-* (hopefully never needed)
-*
-* @param 	str 	String 	formatted String
-* @returns	boolean 	true = isFeet
-*/
+/**
+ * To differentiate footage strings from keycode strings
+ * (hopefully never needed)
+ *
+ * @param 	{string} 	str 	formatted String
+ * @return  {boolean} 	Whether or not string representes footage
+ */
 WP.isFeet = function (str) {
 	'use strict';
-	if (str.charAt(str.length - 1) === "'") { return true; }
+	if (str.charAt(str.length - 1) === "'") { 
+		return true; 
+	}
 	return false;
 };
 
