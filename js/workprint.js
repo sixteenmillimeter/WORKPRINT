@@ -170,7 +170,7 @@ WP.saveKeycode = function ($elem) {
 				WP.storeReel(film.reels[i]);
 			} else if (frames !== 0) {
 				film.reels[i].frames = frames;
-				film.reels[i].footage = this.toFeet(film.reels[i].frames);
+				film.reels[i].footage = WP.toFeet(film.reels[i].frames);
 				film.reels[i].realtime = film.reels[i].frames * (1 / 24);
 				film.reels[i] = WP.compare(film.reels[i]);
 				WP.storeReel(film.reels[i]);
@@ -249,8 +249,8 @@ WP.correctBlack = function () {
 			film.cuts[i].digital.o = film.cuts[i].location.end - film.cuts[i].location.start;
 			film.cuts[i].timecode.i = this.toTimecode(0,film.cuts[i].framerate);
 			film.cuts[i].timecode.o = this.toTimecode(film.cuts[i].location.end - film.cuts[i].location.start, film.cuts[i].framerate);
-			film.cuts[i].feet.i = this.toFeet(0);
-			film.cuts[i].feet.o = this.toFeet(film.cuts[i].frames.o);
+			film.cuts[i].feet.i = WP.toFeet(0);
+			film.cuts[i].feet.o = WP.toFeet(film.cuts[i].frames.o);
 			totalBlack += film.cuts[i].frames.o;
 			videoBlack += film.cuts[i].digital.o;
 			rate = film.cuts[i].framerate;
@@ -259,7 +259,7 @@ WP.correctBlack = function () {
 	if (totalBlack !== 0) {
 		var b = new Reel ('*BLACK*', videoBlack, rate);
 		b.frames = totalBlack;
-		b.footage = this.toFeet(totalBlack);
+		b.footage = WP.toFeet(totalBlack);
 		b.deviate = totalBlack - this.pulldown(videoBlack, rate);
 		b.C = (totalBlack - this.pulldown(videoBlack, rate)) / totalBlack;
 		film.reels.push(b);
@@ -368,8 +368,8 @@ WP.updateCuts = function (reel) {
 				film.cuts[i].keycode.i = keyBase + this.toKey(frameBase + digitalIn);
 				film.cuts[i].keycode.o = keyBase + this.toKey(frameBase + digitalOut);
 				film.cuts[i].deviate = Math.round(reel.C * (digitalOut - digitalIn));
-				film.cuts[i].feet.i = this.toFeet(digitalIn);
-				film.cuts[i].feet.o = this.toFeet(digitalOut);
+				film.cuts[i].feet.i = WP.toFeet(digitalIn);
+				film.cuts[i].feet.o = WP.toFeet(digitalOut);
 				film.cuts[i].framerate = reel.framerate;
 				film.cuts[i].C = reel.C;
 			} else if (reel.frames !== null && reel.frames !== 0) {
@@ -380,8 +380,8 @@ WP.updateCuts = function (reel) {
 					"o" : digitalOut
 				};
 				film.cuts[i].deviate = Math.round(reel.C * (digitalOut - digitalIn));
-				film.cuts[i].feet.i = this.toFeet(digitalIn);
-				film.cuts[i].feet.o = this.toFeet(digitalOut);
+				film.cuts[i].feet.i = WP.toFeet(digitalIn);
+				film.cuts[i].feet.o = WP.toFeet(digitalOut);
 				film.cuts[i].framerate = reel.framerate;
 				film.cuts[i].C = reel.C;
 			}
@@ -635,7 +635,7 @@ WP.pulldown = function (d, framerate) {
 WP.toRough = function (frames, framerate) {
 	'use strict';
 	var n = Math.floor((frames/framerate) * 24);
-	return this.toFeet(n);
+	return WP.toFeet(n);
 };
 
 /* WP.toTimecode
@@ -679,19 +679,21 @@ WP.fromFeet = function (footage) {
 	return Math.round((feet * 40) + frames);
 };
 
-/* WP.toFeet
-* Convert frame count to footage notation 0+00'
-*
-* @param: frames - integer
-* @param: start - formated String (optional)
-* @returns: formatted String (0+00')
-*/
+/**
+ * Convert frame count to footage notation 0+00'
+ *
+ * @param {integer} frames Count of frames to be converted
+ * @param {string} start  Formatted footage string representing start (optional)
+ *
+ * @return {string}  String formatted (0+00')
+ */
 WP.toFeet = function (frames, start) {
 	'use strict';
+	var feet;
 	if (start !== null && start !== undefined && start !== "0+00'") {
 		frames += WP.fromFeet(start);
 	}
-	var feet = Math.floor(frames / 40);
+	feet = Math.floor(frames / 40);
 	frames = frames % 40;
 	return feet + '+' + WP.zeroPad(frames, 2) + "'";
 };
