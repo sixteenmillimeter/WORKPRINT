@@ -26,7 +26,7 @@ WP.build = function (obj) {
 			var cuts = [],
 				reels = [],
 				track = obj.sequence.media.video.track
-			if (this.isArray(track)){
+			if (WP.isArray(track)){
 				for (var i = 0; i < track.length; i++) {
 					if (track[i].clipitem !== undefined) {
 						cuts = cuts.concat(track[i].clipitem);
@@ -780,12 +780,13 @@ WP.isKey = function (str) {
 	}
 };
 
-/* WP.isArray
-* Determines if input is an Object or an Array
-*
-* @param 	obj 	Object or Array
-* @returns	boolean	true = obj is array
-*/
+/**
+ * Determines if input is an Object or an Array
+ *
+ * @param 	{object|array} 	obj 	Object or Array
+ *
+ * @return	{boolean}	true if input is array
+ */
 WP.isArray = function (obj) {
 	'use strict';
 	return obj.constructor == Array;
