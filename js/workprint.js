@@ -662,18 +662,20 @@ WP.toTimecode = function (frames, rate) {
 	return str;
 };
 
-/* WP.fromFeet
-* All feet measurements must be marked with trailing '
-* can be unpadded with preceding 0
-*
-* @param: footage - formated String (0+00')
-* @returns: frames - integer
-*/
+/**
+ * All feet measurements must be marked with trailing '
+ * can be unpadded with preceding 0
+ *
+ * @param {string} footage  Foortage formated string (0+00')
+ *
+ * @return {integer} frames
+ */
 WP.fromFeet = function (footage) {
 	'use strict';
-	var pieces = footage.split('+'),
-		feet = parseInt(pieces[0], 10),
-		frames = parseInt(pieces[1].substring(0, 2), 10);
+	var pieces = footage.split('+');
+	var feet = parseInt(pieces[0], 10);
+	var frames = parseInt(pieces[1].substring(0, 2), 10);
+	
 	return Math.round((feet * 40) + frames);
 };
 
@@ -687,7 +689,7 @@ WP.fromFeet = function (footage) {
 WP.toFeet = function (frames, start) {
 	'use strict';
 	if (start !== null && start !== undefined && start !== "0+00'") {
-		frames += this.fromFeet(start);
+		frames += WP.fromFeet(start);
 	}
 	var feet = Math.floor(frames / 40);
 	frames = frames % 40;
