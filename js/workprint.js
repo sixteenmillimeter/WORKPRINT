@@ -100,7 +100,7 @@ WP.dataInput = function () {
 			$(this).addClass('filled');
 		} else if ($(this).hasClass('o') && WP.isFeet(v)) {
 			$(this).addClass('filled');
-		} else if ($(this).hasClass('o') && !WP.isAlpha(v[0]) && !WP.isAlpha(v[0]) && v.length > 0) {
+		} else if ($(this).hasClass('o') && !WP.isAlpha(v[0]) && v.length > 0) {
 			$(this).addClass('filled');
 		}
 		if ($(this).parent().parent().find('.i').hasClass('filled') && $(this).parent().parent().find('.o').hasClass('filled')) {
@@ -832,12 +832,33 @@ WP.sortReels = function (a, b) {
 	return 0;
 };
 
+/**
+ * Determines if a string is composed entirely of
+ * alphabetic characters A-Z, upper or lowercase.
+ *
+ * @param {string} 	str 	String to evaluate
+ *
+ * @returns {boolean} Whether string passes test
+ */
 WP.isAlpha = function (str) {
-    return str.match(/^([a-z\(\)]+)$/i);
+	'use strict';
+	if (typeof str === 'number') {
+		str += ''
+	}
+    return str.match(/^([a-z\(\)]+)$/i) !== null;
 };
 
+/**
+ * Determines if a string is composed entirely of
+ * numeric characters.
+ *
+ * @param {string} 	n 	String to evaluate
+ *
+ * @returns {boolean} Whether string passes test
+ */
 WP.isNumeric = function (n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+	'use strict';
+	return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
 function Film (fname) {
