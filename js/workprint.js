@@ -770,13 +770,21 @@ WP.isFeet = function (str) {
 	return false;
 };
 
+/**
+ * To validate whether string is a keycode
+ *
+ * @param {string}  str 	String to evaluate
+ *
+ * @return {boolean} Whether or not string is a keycode
+ */
 WP.isKey = function (str) {
+	'use strict';
 	if (str.length > 6) {
 		var where = str.indexOf('+');
 		if (where === str.length - 3) {
 		   return true;
 		}
-	return false;
+		return false;
 	}
 };
 
