@@ -132,8 +132,24 @@ QUnit.test('WP.toFeet', function (assert) {
 	assert.equal(WP.toFeet(frames2), "55+22'", 'Returns string representing 55 feet and 22 odd frames. Inverse of previously used example')
 	assert.equal(WP.toFeet(frames3, start3), "22+00'", 'Returns string representing 22 feet and 0 odd frames when starting value is equivalent of 0 feet and 0 frames');
 	assert.equal(WP.toFeet(frames4, start4), "23+25'", 'Returns string representing 22 feet + 1 feet and 0 frames + 25 frames when starting values is equivalent of 1 feet and 25 frames');
+});
 
-})
+QUnit.test('WP.isKey', function (assert) {
+	var key = '3404+00';
+	var feet = "55+00'";
+	var longKey = 'eK99 2440 9000+00';
+	var compactKey = 'fN2039398888+08';
+	var missplaced = '200+001';
+
+	assert.ok(WP.isKey(key), '7 character key is validated.');
+	assert.notOk(WP.isKey(feet), 'Footage string is deemed invalidated.');
+	assert.ok(WP.isKey(longKey), 'Long display keys are validated.');
+	assert.ok(WP.isKey(compactKey), 'Compact stored keys are validated.');
+	assert.notOk(WP.isKey(missplaced), 'Keys with missplaced plus signs are invalidated');
+});
+
+//QUnit.test('WP.fromKey', function (assert) {})
+//QUnit.test('WP.toKey', function (assert) {})
 
 //prioritized
 
