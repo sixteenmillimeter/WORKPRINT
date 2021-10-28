@@ -48,6 +48,6 @@ For Adobe Premiere, export using File > Export > Final Cut Pro XML.
 
 ### VII. WORKPRINT.
 
-Go to [sixteenmillimeter.com/workprint](http://sixteenmillimeter.com/workprint) and upload your XML file. You will be prompted to enter the logged keykode information about each unique reel the software detects. Once you have entered the values, they are stored to your browser if you ever try to upload a new version of the cut using the same reels.
+Go to [sixteenmillimeter.com/projects/workprint](http://sixteenmillimeter.com/projects/workprint) and upload your XML file. You will be prompted to enter the logged keykode information about each unique reel the software detects. Once you have entered the values, they are stored to your browser if you ever try to upload a new version of the cut using the same reels.
 
 Your cutlist is generated, along with a chart of reels used and a measurement of how much clear leader is needed for black space. 
