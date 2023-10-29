@@ -8,6 +8,8 @@
 
 var film = {};
 var WP = {};
+
+WP.json = false;
 //-------------------------------------------------
 // WP (Work Print) Class
 //-------------------------------------------------
@@ -19,8 +21,9 @@ var WP = {};
 */
 WP.build = function (obj) {
 	'use strict';
+	obj = WP.json.xmeml;
 	if (obj != false && obj !== undefined) {
-		if (obj['@attributes'].version === "5" || obj['@attributes'].version === "4") {
+		if (obj['@version']=== "5" || obj['@version']=== "4") {
 			console.log('XML2JSON:')
 			console.dir(obj);
 			var cuts = [],
@@ -951,7 +954,7 @@ WP.xml2json = function (input) {
 			var dom = parseXml(str);
     		var json = xml2json(dom);
     		json = json.replace('undefined"xmeml', '"xmeml');
-			console.dir(JSON.parse(json));
+			WP.json = JSON.parse(json);
 		};
 		reader.readAsText(input.files[0]);
 	}

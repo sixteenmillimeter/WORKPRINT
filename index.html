@@ -57,22 +57,22 @@
         <!--Body-->
       <div id="landing" class="hero-unit">
         <h1>Create a new cutlist</h1>
-        <p>Start by uploading a project exported from Final Cut Pro using their <a href="http://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=97%26section=3%26tasks=true" target="blank">XML Interchange Format</a>, version 5. You will be prompted to either enter your roll information or upload a <a href="">Roll Info file (.edg)</a>. You can also start a project by manually entering in the frame numbers of individual shots.</p>
+        <p>Start by uploading a project exported from Final Cut Pro using their <a href="http://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=97%26section=3%26tasks=true" target="blank">XML Interchange Format</a>, version 5. You will be prompted to either enter your roll information.</p>
         <div class="btn btn-primary" id="upload">
-          <div class="icon-upload icon-white"></div> Upload .xml
+          <div class="icon-upload icon-white"></div> Choose .xml
         </div>
         <div class="btn btn-warning disabled" id="manual">
            <div class="icon-pencil icon-white"></div> Enter manually
         </div>
       </div>
       <br />
-      <form id="uploadFile" action="php/xml2json.php" method="POST" enctype="multipart/form-data" class="well" style="margin-top: -17px;" action="">
+      <div id="uploadFile" class="well" style="margin-top: -17px;">
         <h3>Upload an .xml file</h3>
         <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
-        <input id="browseFile" name="file" type="file" class="span3" placeholder="Choose a file..." onchange="WP.xml2json(this);" />
+        <input id="browseFile" name="file" type="file" class="span3" placeholder="Choose a file..." onchange="WP.xml2json(this);" autocomplete="off" />
         <p class="help-block">Choose a Final cut project that has been exported using their <a href="http://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=97%26section=3%26tasks=true" target="blank">XML Interchange Format</a>, version 4+</p>
-        <input type="submit" value="Build Cutlist" name="submit" class="btn btn-primary disabled" id="loadFile">
-      </form>
+        <button class="btn btn-primary disabled" id="loadFile" onclick="WP.build()">Build Cutlist</button>
+      </div>
      <div id="keycodeEntry">
      </div>
       <br />
